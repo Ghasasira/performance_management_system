@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'KPI System'),
 
     /*
     |--------------------------------------------------------------------------
@@ -70,7 +70,10 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    // 'timezone' => 
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
+
+    // UTC + 03:00,
 
     /*
     |--------------------------------------------------------------------------
@@ -168,6 +171,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\FortifyServiceProvider::class,
+        App\Providers\JetstreamServiceProvider::class,
     ])->toArray(),
 
     /*

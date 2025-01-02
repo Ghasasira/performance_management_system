@@ -9,7 +9,7 @@
                     {{ __('Get Report') }}
                 </x-secondary-button>
 
-                <!-- New Department Modal -->
+                <!-- Report Modal -->
                         <div class="modal fade" id="addDepartmentModal" tabindex="-1" aria-labelledby="addDepartmentModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <form action="{{ route('reports.show') }}" method="POST">

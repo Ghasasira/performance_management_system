@@ -16,12 +16,12 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $user = auth()->user()->id;
+        $user = auth()->user()->userId;
         // User::all();
         $quarter = Quarter::where('is_active', true)->first();
 
         if ($quarter) {
-            $tasks = Task::where('user_id', auth()->user()->id)
+            $tasks = Task::where('user_id', auth()->user()->userId)
                 ->where('quarter_id', $quarter->id)
                 ->paginate(10);
             return view('tasks.index', ['data' => $tasks, 'user' => $user, 'quarter' => $quarter->name]);
@@ -54,7 +54,7 @@ class TaskController extends Controller
 
         if ($quarter) {
             $input = $request->all();
-            $input['user_id'] = auth()->user()->id;
+            $input['user_id'] = auth()->user()->userId;
             $input['quarter_id'] = $quarter->id;
 
             try {
@@ -65,7 +65,8 @@ class TaskController extends Controller
             } catch (\Exception $e) {
                 // Handle creation errors (e.g., log the error, display a user-friendly message)
                 smilify('error', 'Process Unsuccessful');
-                return back();
+                return $e;
+                //  back();
             }
         }
     }
@@ -83,10 +84,29 @@ class TaskController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'weight' => 'required|integer',
+            'deadline' => 'required|date',
+            // "user_id" => 'required',
+        ]);
 
+        try {
+            // Find the task by ID
+            $task = Task::findOrFail($id);
+
+            // Update the task
+            $task->update($request->all());
+            $task->save();
+            smilify('success', 'Task status updated successfully.');
+            return back();
+        } catch (\Exception $e) {
+            smilify('error', 'An error occurred while updating the task.');
+            return back()->withErrors(['msg' => 'An error occurred while updating the task.']);
+        }
     }
 
     /**
@@ -94,14 +114,69 @@ class TaskController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validate the incoming data
+        $request->validate([
+            'status' => 'required|string',
+        ]);
+
+        try {
+            // Find the task by ID
+            $task = Task::findOrFail($id);
+
+            // Update the status of the task
+            $task->update([
+                'status' => $request->input('status'),
+            ]);
+            smilify('success', 'Task status updated successfully.');
+            return redirect()->route('tasks.index');
+        } catch (\Exception $e) {
+            smilify('error', 'An error occurred while defering the task status.');
+            return back()->withErrors(['msg' => 'An error occurred while updating the task status.']);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+        try {
+            // Find the task by ID
+            $task = Task::findOrFail($id);
+
+            // Delete all subtasks related to the task
+            $task->subtasks()->delete();
+
+            // Delete the task
+            $task->delete();
+
+            smilify('success', 'Task and all its subtasks deleted successfully.');
+            return  back();
+        } catch (\Exception $e) {
+            //Log::error('Task deletion error: ' . $e->getMessage());
+            smilify('error', 'An error occurred while deleting the task and its subtasks.');
+            return back()->withErrors(['msg' => 'An error occurred while deleting the task and its subtasks.']);
+        }
+    }
+
+    public function differTask(int $id)
+    {
+        try {
+            // Find the task by ID
+            $task = Task::findOrFail($id);
+
+            // Delete all subtasks related to the task
+            // $task->subtasks()->delete();
+
+            // Differ the task
+            $task->status = "differed";
+            $task->save();
+
+            smilify('success', 'Task and all its subtasks differed successfully.');
+            return  back();
+        } catch (\Exception $e) {
+            smilify('error', 'An error occurred while differing the task and its subtasks.');
+            return back()->withErrors(['msg' => 'An error occurred while differing the task and its subtasks.']);
+        }
     }
 }

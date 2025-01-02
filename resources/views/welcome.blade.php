@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Laravel</title>
+    <title>KPIs</title>
     <link rel="icon" type="image/x-icon" href="assets/Asset.ico">
     
     <!-- Fonts -->
@@ -87,7 +87,8 @@
                         </a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="custom-link">
+                        <!--{{ route('register') }}-->
+                            <a href="#" class="custom-link">
                                 <button class="btn btn-danger custom-button m-2">
                                     Register
                                 </button>

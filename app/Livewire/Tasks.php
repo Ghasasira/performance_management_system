@@ -12,9 +12,9 @@ class Tasks extends Component
     use withPagination;
     // public function render()
     // {
-    //     $user = auth()->user()->id;
+    //     $user = auth()->user()->userId;
     //     // User::all();
-    //     $tasks = Task::where('user_id',auth()->user()->id)
+    //     $tasks = Task::where('user_id',auth()->user()->userId)
     //     ->paginate(10);
     //     return view('livewire.tasks',['data'=> $tasks,'user'=>$user]);
     // }

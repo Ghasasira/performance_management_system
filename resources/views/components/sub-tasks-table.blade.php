@@ -6,7 +6,7 @@
     </div>
 
     <div class="md:max-h-[50vh] min-w-full flex items-center justify-center md:px-4 mt-10">
-        <div class="bg-white w-full rounded-lg shadow-xl overflow-hidden">
+        <div class="bg-white w-full ">
             <div class="p-6">
                 @foreach(['Status' => $task->status, 'Weight' => $task->weight, 'Score' => $task->score, 'Description' => $task->description] as $label => $value)
                 <div class="grid grid-cols-2 hover:bg-gray-50 space-y-1 md:space-y-0 md:py-3">
@@ -29,6 +29,15 @@
         </div>
     </div>
 
+        <!-- Floating Action Button -->
+        <div class="fixed bottom-0 right-0 m-4 bg-blue-500 text-white p-3 rounded-lg shadow-lg block md:hidden">
+            <div data-bs-toggle="modal" data-bs-target="#addSubTaskModal">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+            </div>
+        </div>
+    
     <div class="container mx-auto p-1 w-full">
         <!-- Cards for small screens -->
         <div class="block md:hidden space-y-4 mb-2">
@@ -36,7 +45,7 @@
             <div class="bg-white p-1 rounded-lg shadow-md w-full">
                 <div class="flex justify-between border-b pb-2 mb-2">
                     <h3 class="text-lg font-semibold text-blue-500">{{ $subtask->title }}</h3>
-                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                    <span class="relative inline-block max-h-[30px] px-3 py-1 font-semibold text-green-900 leading-tight">
                         <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
                         <span class="relative text-xs">{{ $subtask->status }}</span>
                     </span>
@@ -65,11 +74,12 @@
                                 Submitted
                             </button>
                         @endif
-                    {{-- @else
-                        <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                            <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                            <span class="relative text-xs">Approved</span>
-                        </span> --}}
+                    @else
+                    <a href="{{ url('tasks/subtasks/submit/'.$subtask->id) }}">
+                        <button class="rounded-lg bg-blue-500 py-2 px-2 font-sans text-xs font-bold uppercase text-white shadow-md transition-all hover:shadow-lg focus:opacity-85 active:opacity-85">
+                            Re-submit
+                        </button>
+                    </a>
                     @endif
                 </div>
             </div>
@@ -114,11 +124,26 @@
                             @if ($subtask->status != 'approved')
                                 @if ($subtask->status == 'pending')
                                 <td>
-                                    <a href="{{ url('tasks/subtasks/submit/'.$subtask->id) }}">
-                                        <button class="rounded-lg bg-blue-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md transition-all hover:shadow-lg focus:opacity-85 active:opacity-85">
-                                            Submit
-                                        </button>
-                                    </a>
+                                    <div class="flex items-center">
+                                        <a href="{{ url('tasks/subtasks/submit/'.$subtask->id) }}">
+                                            <button class="rounded-lg bg-blue-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md transition-all hover:shadow-lg focus:opacity-85 active:opacity-85">
+                                                Submit
+                                            </button>
+                                        </a>
+
+                                        <form action="{{ route('tasks.subtasks.destroy', [$task->id, $subtask->id]) }}" method="POST" onsubmit="return confirm('Are You sure you want to delete subtask?');">
+                                            {{-- <div name="trigger"> --}}
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none transition">
+                                                    {{-- <img src="\assets\delete.svg" alt="Icon description" class="h-16">                                              --}}
+                                                    <button class="m-1 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md transition-all hover:shadow-lg focus:opacity-85 active:opacity-85">
+                                                        Delete
+                                                    </button>
+                                                </button>
+                                            {{-- </div> --}}
+                                        </form>
+                                    </div>
                                 </td> 
                                 @else
                                 <td>
@@ -129,10 +154,11 @@
                                 @endif 
                             @else
                             <td>
-                                <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                                    <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
-                                    <span class="relative text-xs">Approved</span>
-                                </span>
+                                <a href="{{ url('tasks/subtasks/submit/'.$subtask->id) }}">
+                                    <button class="rounded-lg bg-gray-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md transition-all hover:shadow-lg focus:opacity-85 active:opacity-85">
+                                        Re-submit
+                                    </button>
+                                </a>
                             </td>
                             @endif  
                         </tr> 
@@ -141,7 +167,7 @@
                 </table>
             </div>
         </div>
-    </div>
+</div>
 </div>
 
 {{-- ................. --}}

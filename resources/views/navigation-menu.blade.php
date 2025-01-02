@@ -32,7 +32,7 @@
                         {{ __('Historical Data') }}
                     </x-nav-link>
                 </div>
-                @if (auth()->user()->user_type=="admin")
+                @if (auth()->user()->groupId==53)
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('department.index') }}" :active="request()->routeIs('department.index')">
                     {{-- :active="request()->routeIs('culture.index')"> --}}
@@ -40,14 +40,14 @@
                     </x-nav-link>
                 </div>
                 @endif
-                @if (auth()->user()->is_supervisor)
+                @if (auth()->user()->classification_name=="smt" ||auth()->user()->classification_name=="tmt")
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('supervisees.index') }}" :active="request()->routeIs('supervisees.index')">
                         {{ __('Submissions') }}
                     </x-nav-link>
                 </div>
                 @endif
-                @if (auth()->user()->user_type=="admin")
+                @if (auth()->user()->groupId==53)
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('quarter.index') }}" :active="request()->routeIs('quarter.index')">
                         {{ __('Quarters') }}
@@ -64,12 +64,13 @@
                         <x-slot name="trigger">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                                 <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                    <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                                    <img class="h-8 w-8 rounded-full object-cover" src="https://flyclipart.com/thumb2/human-human-avatar-male-icon-with-png-and-vector-format-for-free-19807.png" alt="{{ Auth::user()->name }}" />
+                                    {{-- {{ Auth::user()->profile_photo_url }} --}}
                                 </button>
                             @else
                                 <span class="inline-flex rounded-md">
                                     <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                        {{ Auth::user()->first_name }}
+                                        {{ Auth::user()->firstName }}
 
                                         <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />

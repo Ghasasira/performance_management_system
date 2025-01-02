@@ -13,11 +13,13 @@ class Excellence extends Model
         'user_id',
     ];
 
-    public function quarter(){
+    public function quarter()
+    {
         return $this->belongsTo(Quarter::class);
     }
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'userId');
     }
 }

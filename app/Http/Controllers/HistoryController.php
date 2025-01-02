@@ -12,10 +12,10 @@ class HistoryController extends Controller
      */
     public function index()
     {
-        $user = auth()->user()->id;
-        $tasks = Task::where('user_id',auth()->user()->id)
-        ->paginate(10);
-        return view("tasks.history", ["data"=>$tasks]);
+        $user = auth()->user()->userId;
+        $tasks = Task::where('user_id', auth()->user()->userId)
+            ->paginate(10);
+        return view("tasks.history", ["data" => $tasks]);
     }
 
     /**

@@ -28,7 +28,7 @@
 
                 <!-- Current Profile Photo -->
                 <div class="mt-2" x-show="! photoPreview">
-                    <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}" class="rounded-full h-20 w-20 object-cover">
+                    <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->firstName }}" class="rounded-full h-20 w-20 object-cover">
                 </div>
 
                 <!-- New Profile Photo Preview -->
@@ -55,12 +55,12 @@
         <!-- Name -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="firstname" value="{{ __('First Name') }}" />
-            <x-input id="firstname" type="text" class="mt-1 block w-full" wire:model="state.first_name" required autocomplete="name" />
+            <x-input id="firstname" type="text" class="mt-1 block w-full" wire:model="state.firstName" required autocomplete="name" />
             <x-input-error for="firstname" class="mt-2" />
         </div>
         <div class="col-span-6 sm:col-span-4">
             <x-label for="lastname" value="{{ __('Last Name') }}" />
-            <x-input id="lastname" type="text" class="mt-1 block w-full" wire:model="state.last_name" required autocomplete="name" />
+            <x-input id="lastname" type="text" class="mt-1 block w-full" wire:model="state.lastName" required autocomplete="name" />
             <x-input-error for="lastname" class="mt-2" />
         </div>
 

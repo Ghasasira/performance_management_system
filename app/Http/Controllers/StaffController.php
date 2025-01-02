@@ -39,8 +39,8 @@ class StaffController extends Controller
             "subdepartment" => 'required',
 
         ]);
-        // $userId = auth()->user()->id;
-        $user = User::find(auth()->user()->id);
+        // $userId = auth()->user()->userId;
+        $user = User::find(auth()->user()->userId);
 
 
         $user->staff()->create([

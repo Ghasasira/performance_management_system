@@ -125,8 +125,5 @@ class QuarterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Quarter $quarter)
-    {
-        //
-    }
+    public function destroy(Quarter $quarter) {}
 }

@@ -5,7 +5,8 @@
                 {{ __("KPI Report for $quarter->name") }}
             </h2>
             <div class="h-10" >
-                <a href="{{ route('reports.download', $quarter->id) }}">
+                <a href="#">
+                    {{-- {{ route('reports.download', $quarter->id) }}"> --}}
                     <x-secondary-button>
                         {{ __('Download Report') }}
                     </x-secondary-button>

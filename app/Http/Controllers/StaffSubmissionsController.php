@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\Models\Subdepartment;
+use App\Models\Department;
 use App\Models\Subtask;
 use App\Models\Task;
 use App\Models\Staff;
 use App\Models\User;
+use App\Models\Quarter;
 
 class StaffSubmissionsController extends Controller
 {
@@ -18,41 +20,48 @@ class StaffSubmissionsController extends Controller
     {
         $currentUser = auth()->user();
 
-        // Retrieve all subdepartments supervised by the current user
-        $departments = Subdepartment::where('supervisor_id', $currentUser->id)->get();
+        // $quarters = Quarter::where('is_active', false)->get();
+        $quarters = Quarter::get();
 
-        // Check if any department is found
-        if ($departments->isEmpty()) {
-            return abort(401, 'User is not a supervisor for any department');
-        }
+        if ($currentUser->groupId == 53 || $currentUser->classification_name == "smt" || $currentUser->classification_name == "tmt") {
+            // Retrieve all subdepartments supervised by the current user
+            $departments = Department::where('department_id', $currentUser->department_id)->pluck('department_id');
 
-        $supervisees = collect();
-
-        // Collect all supervisees from the subdepartments
-        foreach ($departments as $department) {
-            $dept_supervisees = Staff::where('department_id', $department->id)->get();
-            $supervisees = $supervisees->merge($dept_supervisees);
-        }
-
-        // Ensure supervisees are unique
-        $supervisees = $supervisees->unique('user_id');
-
-        $users = [];
-
-        // Loop through each unique supervisee
-        foreach ($supervisees as $supervisee) {
-            // Find the user associated with the supervisee's user_id
-            $superviseeUser = User::find($supervisee->user_id);
-            // Assuming Staff model has a user_id
-
-            // Check if user is found (optional, handle cases where user might be missing)
-            if ($superviseeUser) {
-                $users[] = $superviseeUser; // Add the user to the users array
+            // Check if any department is found
+            if ($departments->isEmpty()) {
+                return abort(401, 'User is not a supervisor for any department');
             }
-        }
 
-        return view("tasks.supervisees", ["data" => $users]);
+            if ($currentUser->classification_name == "tmt") {
+                // Fetch all users classified as normal users (exclude SMTs and TMTs)
+                $supervisees = User::where('department_id', $currentUser->department_id)
+                    ->whereIn('classification_name', ['smt', 'tmt', " "])
+                    ->where('userId', "!=", $currentUser->userId)
+                    ->with('job')
+                    ->get();
+            } elseif ($currentUser->classification_name == "smt") {
+                // Fetch all users except TMTs in the same department
+                $supervisees = User::where('department_id', $currentUser->department_id)
+                    ->where(function ($query) {
+                        $query->whereNull('classification_name')
+                            ->orWhereNotIn('classification_name', ['smt', 'tmt']);
+                    })
+                    ->where('userId', "!=", $currentUser->userId)
+                    ->with('job')
+                    ->get();
+            }
+            // Optional: check if any supervisees are found
+            if ($supervisees->isEmpty()) {
+                return abort(404, 'No supervisees found');
+            }
+
+            return view("tasks.supervisees", ["data" => $supervisees, "quarters" => $quarters]);
+        } else {
+            return abort(401, 'User is not authorized to view this page');
+        }
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -75,24 +84,33 @@ class StaffSubmissionsController extends Controller
      */
     public function show(User $supervisee)
     {
-        // Find the user along with their tasks and submitted subtasks
-        $user = User::with('tasks.subtasks')->find($supervisee->id);
+        // Find the user along with their tasks and subtasks
+        $user = User::with('tasks.subtasks')->find($supervisee->userId);
 
         // Check if user is found (optional)
         if (!$user) {
             return abort(404, 'User not found');
         }
 
+        // List of statuses to compare
+        $statusList = ['submitted', 'approved', 'pending'];
+
+        // Convert the status list to lowercase
+        $lowercaseStatusList = array_map('strtolower', $statusList);
+
         // Transform the data structure to include tasks and their submitted subtasks
-        $data = $user->tasks->map(function ($task) {
-            $submittedSubtasks = $task->subtasks->whereIn('status', ['submitted', 'approved']);
+        $data = $user->tasks->map(function ($task) use ($lowercaseStatusList) {
+            $submittedSubtasks = $task->subtasks->filter(function ($subtask) use ($lowercaseStatusList) {
+                return in_array(strtolower($subtask->status), $lowercaseStatusList);
+            });
+
             return [
                 'task' => $task,
                 'subtasks' => $submittedSubtasks,
             ];
         });
 
-        return view('tasks.submitted', ['data' => $data, 'superviseeId' => $supervisee->id]);
+        return view('tasks.submitted', ['data' => $data, 'superviseeId' => $supervisee->userId]);
     }
 
 

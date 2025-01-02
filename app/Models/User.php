@@ -20,6 +20,9 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+
+    protected $primaryKey = 'userId';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,9 +30,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'first_name',
-        'last_name', 
-        'email', 
-        'password', 
+        'last_name',
+        'username',
+        'password',
         //'is_staff',
     ];
 
@@ -70,33 +73,37 @@ class User extends Authenticatable
 
     public function tasks()
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class, 'user_id', 'userId');
     }
 
     public function culture()
     {
-        return $this->hasMany(Culture::class);
+        return $this->hasMany(Culture::class, 'user_id', 'userId');
     }
 
     public function people()
     {
-        return $this->hasMany(People::class);
+        return $this->hasMany(People::class, 'user_id', 'userId');
     }
     public function equity()
     {
-        return $this->hasMany(Equity::class);
+        return $this->hasMany(Equity::class, 'user_id', 'userId');
     }
     public function excellence()
     {
-        return $this->hasMany(Excellence::class);
+        return $this->hasMany(Excellence::class, 'user_id', 'userId');
     }
     public function teamwork()
     {
-        return $this->hasMany(Teamwork::class);
+        return $this->hasMany(Teamwork::class, 'user_id', 'userId');
     }
     public function integrity()
     {
-        return $this->hasMany(Integrity::class);
+        return $this->hasMany(Integrity::class, 'user_id', 'userId');
     }
 
+    public function job()
+    {
+        return $this->belongsTo(Job::class, 'job_id');
+    }
 }

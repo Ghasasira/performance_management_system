@@ -19,22 +19,21 @@ class CultureController extends Controller
      */
     public function index()
     {
-        $user = auth()->user()->id;
-        $quarter=Quarter::where('is_active', true)->first();
-        
-        if($quarter){
+        $user = auth()->user()->userId;
+        $quarter = Quarter::where('is_active', true)->first();
+
+        if ($quarter) {
             $data = Culture::where('user_id', $user)
-            ->where('quarter_id', $quarter->id)
-            ->first();
-            if($data){
-                return view("culture.index",["data"=>$data]);
-            }else{
-                return view("culture.index",["data"=>null]);
-            }            
-        } else if(!$quarter){
+                ->where('quarter_id', $quarter->id)
+                ->first();
+            if ($data) {
+                return view("culture.index", ["data" => $data]);
+            } else {
+                return view("culture.index", ["data" => null]);
+            }
+        } else if (!$quarter) {
             return view("util.no-quarter");
         }
-       
     }
 
     /**
@@ -51,8 +50,8 @@ class CultureController extends Controller
      */
     public function store()
     {
-        // $user_id= auth()->user()->id;
-    
+        // $user_id= auth()->user()->userId;
+
         // try {
         //     Culture::create($user_id);
         //     return dump("created");
@@ -68,22 +67,22 @@ class CultureController extends Controller
     public function show(string $id)
     {
         $user = auth()->user();
-        $quarter=Quarter::where('is_active', true)->first();
+        $quarter = Quarter::where('is_active', true)->first();
 
-    $integrityData = Integrity::where('user_id', $user->id)->where('quarter_id', $quarter->id)->get();
-    $equityData = Equity::where('user_id', $user->id)->where('quarter_id', $quarter->id)->get();
-    $peopleData = People::where('user_id', $user->id)->where('quarter_id', $quarter->id)->get();
-    $excellenceData = Excellence::where('user_id', $user->id)->where('quarter_id', $quarter->id)->get();
-    $teamworkData = Teamwork::where('user_id', $user->id)->where('quarter_id', $quarter->id)->get();
-    
-    $cultureData = [
-        'integrity' => json_decode($integrityData,true),
-        'equity' => json_decode($equityData,true),
-        'people' => json_decode($peopleData,true),
-        'excellence' => json_decode($excellenceData,true),
-        'teamwork' => json_decode($teamworkData,true),
-    ];
-        return view('culture.culture-details',["data"=>$cultureData]);
+        $integrityData = Integrity::where('user_id', $user->userId)->where('quarter_id', $quarter->id)->get();
+        $equityData = Equity::where('user_id', $user->userId)->where('quarter_id', $quarter->id)->get();
+        $peopleData = People::where('user_id', $user->userId)->where('quarter_id', $quarter->id)->get();
+        $excellenceData = Excellence::where('user_id', $user->userId)->where('quarter_id', $quarter->id)->get();
+        $teamworkData = Teamwork::where('user_id', $user->userId)->where('quarter_id', $quarter->id)->get();
+
+        $cultureData = [
+            'integrity' => json_decode($integrityData, true),
+            'equity' => json_decode($equityData, true),
+            'people' => json_decode($peopleData, true),
+            'excellence' => json_decode($excellenceData, true),
+            'teamwork' => json_decode($teamworkData, true),
+        ];
+        return view('culture.culture-details', ["data" => $cultureData]);
         // dump($cultureData);
     }
 
@@ -113,20 +112,20 @@ class CultureController extends Controller
 
     public function assess($superviseeId)
     {
-        $quarter=Quarter::where('is_active', true)->first();
+        $quarter = Quarter::where('is_active', true)->first();
 
-        $exists=Culture::where('user_id',$superviseeId)
-        ->where('quarter_id', $quarter->id)
-        ->exists();
+        $exists = Culture::where('user_id', $superviseeId)
+            ->where('quarter_id', $quarter->id)
+            ->exists();
 
         if (!$exists) {
             $quarter->culture()->create(['user_id' => $superviseeId]);
         }
         $data = Culture::where('user_id', $superviseeId)
-        ->where('quarter_id', $quarter->id)
-        ->first();
+            ->where('quarter_id', $quarter->id)
+            ->first();
         //$data = Task::where('user_id',$superviseeId);
         //dump($data);
-        return view('culture.culture-submit',["data"=> $data]);
+        return view('culture.culture-submit', ["data" => $data]);
     }
 }

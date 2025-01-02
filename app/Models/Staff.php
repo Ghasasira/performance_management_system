@@ -19,7 +19,7 @@ class Staff extends Model
     // Define the relationships
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'userId');
     }
 
     public function department()

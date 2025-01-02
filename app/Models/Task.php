@@ -15,7 +15,7 @@ class Task extends Model
         'description',
         'weight',
         'deadline',
-        
+
     ];
 
     // public function setUserIdAttribute($value)
@@ -23,11 +23,18 @@ class Task extends Model
     //     $this->attributes['user_id'] = auth()->id();
     // }
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'userId');
     }
 
-    public function subtasks(){
+    public function subtasks()
+    {
         return $this->hasMany(Subtask::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

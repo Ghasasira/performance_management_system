@@ -13,11 +13,13 @@ class Teamwork extends Model
         'user_id',
     ];
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'userId');
     }
 
-    public function quarter(){
+    public function quarter()
+    {
         return $this->belongsTo(Quarter::class);
     }
 }

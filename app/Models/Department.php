@@ -9,24 +9,27 @@ class Department extends Model
 {
     use HasFactory;
 
+
+    protected $primaryKey = 'department_id';
+
+    protected $table = "department";
+
     protected $fillable = [
         'name',
-        'supervisor_id',
     ];
 
-    public function supervisor()
-    {
-        return $this->belongsTo(User::class, 'supervisor_id');
-    }
+    // public function supervisor()
+    // {
+    //     return $this->belongsTo(User::class, 'supervisor_id');
+    // }
 
-    public function subdepartments()
-    {
-        return $this->hasMany(Subdepartment::class,'dept_id');
-    }
+    // public function subdepartments()
+    // {
+    //     return $this->hasMany(Subdepartment::class, 'dept_id');
+    // }
 
-    public function staff()
+    public function users()
     {
-        return $this->hasMany(Staff::class);
+        return $this->hasMany(User::class);
     }
-    
 }

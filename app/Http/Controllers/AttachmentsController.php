@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attachments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use App\Models\Subtask;
 
@@ -32,7 +33,7 @@ class AttachmentsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'pdf' => 'required|mimes:pdf|max:10000', // 10MB Max
+            'pdf' => 'required|max:10000', // 10MB Max
             'subtaskId' => 'required',
             'subtask_title' => 'required|string',
         ]);
@@ -69,14 +70,32 @@ class AttachmentsController extends Controller
             abort(404);
         }
 
+        // ..................
+        // $file = file_get_contents($path);
+
+        // return Response::make($file, 200, [
+        //     'Content-Type' => 'application/pdf',
+        //     'Content-Disposition' => 'inline; filename="' . $attachment->file_name . '"'
+        // ]);
+        // ...................
+
+
+        // Get the MIME type of the file
+        $mimeType = File::mimeType($path);
+
+        // Get the file content
         $file = file_get_contents($path);
 
-        return Response::make($file, 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . $attachment->file_name . '"'
-        ]);
-        // dump($path);
+        // Determine the Content-Disposition
+        $disposition = (str_contains($mimeType, 'image') || str_contains($mimeType, 'pdf')) ? 'inline' : 'attachment';
+
+        // Return the file as a response with proper headers
+        return response($file, 200)
+            ->header('Content-Type', $mimeType)
+            ->header('Content-Disposition', $disposition . '; filename="' . $attachment->file_name . '"');
+
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -97,10 +116,27 @@ class AttachmentsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Attachments $attachments)
+   public function destroy(Attachments $attachment)
     {
-        //
+        // Get the relative path for deletion
+        $filePath = 'public/pdfs/' . $attachment->file_name;
+    
+        // Check if the file exists in storage
+        if (Storage::exists($filePath)) {
+            // Delete the file from storage
+            Storage::delete($filePath);
+        } else {
+            smilify('error', 'File not found, it may have already been deleted.');
+            return back();
+        }
+    
+        // Delete the attachment record from the database
+        $attachment->delete();
+    
+        smilify('success', 'Attachment deleted successfully.');
+        return back();
     }
+
 
     public function showSubtaskAttachments($subtaskId)
     {

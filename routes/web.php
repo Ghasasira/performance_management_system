@@ -17,6 +17,7 @@ use App\Http\Controllers\IntegritySkillsController;
 use App\Http\Controllers\QuarterController;
 use App\Http\Controllers\AttachmentsController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\CommentsController;
 use App\Models\Quarter;
 
 
@@ -58,13 +59,21 @@ Route::middleware(['auth', 'staff'])->group(function () {
     Route::get('culture/assessment/{id}', [CultureController::class, 'assess'])->name('culture.assessment');
 
     Route::resource("tasks", TaskController::class);
+    Route::post("tasks/differ/{id}", [TaskController::class, "differTask"])->name('tasks.differ');
 
     Route::get("download/report/{id}", [ReportController::class, 'download_report'])->name("reports.download");
 
     Route::post("show/report", [ReportController::class, 'show_report'])->name("reports.show");
 
+    // ############################
+    Route::post("show/deptreport", [ReportController::class, 'show_departmental_report'])->name("deptreports.show");
+
     Route::resource("attachments", AttachmentsController::class);
     Route::get("subtask/attachments/{id}", [AttachmentsController::class, "showSubtaskAttachments"])->name('subtask.attachments');
+
+    Route::resource("tasks.comments", CommentsController::class);
+    // Route::get("task/attachments/{id}", [AttachmentsController::class, "comments"])->name('subtask.attachments');
+
 
     Route::resource("equity", EquitySkillsController::class);
     Route::resource("people", PeopleSkillsController::class);
@@ -87,7 +96,7 @@ Route::middleware(['auth', 'staff'])->group(function () {
 
     Route::get("tasks/subtasks/submit/{id}", [SubtaskController::class, "submit"]);
 
-    Route::post('tasks/subtasks/approve/{id}', [TaskController::class, 'approve'])->name('tasks.subtasks.approve');
+    // Route::post('tasks/subtasks/approve/{id}', [TaskController::class, 'approve'])->name('tasks.subtasks.approve');
 });
 
 

@@ -17,7 +17,7 @@ class CheckStaffRegistration
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->user()->is_staff) {
+        if (!(auth()->user()->accountStatus == "Active")) {
             return redirect()->route('staff.index');
         }
 

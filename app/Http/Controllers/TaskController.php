@@ -78,6 +78,7 @@ class TaskController extends Controller
     {
         // $task = Task::find($id);
         $task->load("subtasks");
+        $task->load('attachments');
         return view("tasks.task-details", ["task" => $task]);
     }
 
@@ -179,4 +180,48 @@ class TaskController extends Controller
             return back()->withErrors(['msg' => 'An error occurred while differing the task and its subtasks.']);
         }
     }
+
+    public function score(Request $request, int $task)
+    {
+        // Find the subtask by ID
+        $currentTask = Task::find($task);
+        if (!$task) {
+            smilify('error', 'Subtask not found');
+            return redirect()->back();
+        }
+
+        $maxscore = $currentTask->weight;
+
+        // Validate the score input
+        $validated = $request->validate([
+            'score' => [
+                'required',
+                'integer',
+                'min:0',
+                "max:$maxscore",
+            ],
+        ]);
+
+        // Update the subtask's score and status
+        $currentTask->score = $validated['score'];
+        $currentTask->status = 'Graded';
+        $currentTask->save();
+
+        // $this->taskService->calculateTaskScore($currentSubtask->task_id);
+        // calculateTaskScore($currentSubtask->task_id);
+
+        smilify('success', 'Process Successful');
+        return back();
+    }
+
+    public function submit($id)
+    {
+        $task = Task::find($id);
+        $task->status = "Submitted";
+        $task->save();
+        smilify('success', 'Process Successful');
+        return back();
+    }
+
+    public function approve(Request $request, $subtaskId) {}
 }

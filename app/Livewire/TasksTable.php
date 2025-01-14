@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
+use Livewire\Component;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Quarter;
-use Livewire\Component;
+// use Livewire\Component;
 use Livewire\WithPagination;
 
-class Taskss extends Component
+
+class TasksTable extends Component
 {
     use WithPagination;
 
@@ -21,7 +23,7 @@ class Taskss extends Component
         'description' => 'required|string',
         'weight' => 'required|integer',
         'deadline' => 'required|date',
-        'status' => 'required|string',
+        // 'status' => 'required|string',
     ];
 
     public function mount()
@@ -39,6 +41,7 @@ class Taskss extends Component
     public function render()
     {
         $quarter = Quarter::where('is_active', true)->first();
+        $user = auth()->user()->userId;
 
         if ($quarter) {
             $tasks = Task::where('user_id', $this->user)
@@ -46,11 +49,14 @@ class Taskss extends Component
                 ->paginate(10);
 
             return view('livewire.tasks-table', [
-                'tasks' => $tasks,
+                // 'tasks' => $tasks,
+                'data' => $tasks,
+                'user' => $user,
+                'quarter' => $quarter->name
             ]);
         }
 
-        return view('livewire.no-quarter');
+        return view('livewire.tasks-table');
     }
 
     public function store()
@@ -66,7 +72,7 @@ class Taskss extends Component
                     'description' => $this->description,
                     'weight' => $this->weight,
                     'deadline' => $this->deadline,
-                    'user_id' => $this->user,
+                    'user_id' => $this->user->id,
                     'quarter_id' => $quarter->id,
                 ]);
 
@@ -98,6 +104,7 @@ class Taskss extends Component
 
         try {
             $task->update([
+                'user' => $this->user,
                 'title' => $this->title,
                 'description' => $this->description,
                 'weight' => $this->weight,
@@ -134,4 +141,9 @@ class Taskss extends Component
         $this->status = null;
         $this->taskId = null;
     }
+
+    // public function render()
+    // {
+    //     return view('livewire.tasks-table');
+    // }
 }

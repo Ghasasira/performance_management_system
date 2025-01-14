@@ -1,5 +1,5 @@
 <form action="{{ route('tasks.subtasks.store', $taskId) }}" method="POST">
-    @csrf    
+    @csrf
     <div class="bg-gray-100 py-6 flex flex-col sm:py-12">
         <div class="relative py-3 sm:max-w-xl sm:mx-auto">
             <div class="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
@@ -18,8 +18,8 @@
                             <label class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-blue-600">Title</label>
                         </div>
                         <div class="relative z-0">
-                            <input type="number" name="weight" class="peer block w-full appearance-none border-0 border-b border-gray-500 bg-transparent py-2.5 px-0 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0" placeholder="" />
-                            <label class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-blue-600">Weight</label>
+                            <input type="hidden" value= 0 name="weight" class="peer block w-full appearance-none border-0 border-b border-gray-500 bg-transparent py-2.5 px-0 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0" placeholder="" />
+                            {{-- <label class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-sm text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-blue-600">Weight</label> --}}
                         </div>
                         <input type="hidden" name="task_id" value={{$taskId}}>
                     </div>

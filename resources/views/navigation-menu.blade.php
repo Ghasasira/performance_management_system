@@ -17,17 +17,17 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('tasks.index') }}" :active="request()->routeIs('tasks.index')">
+                    <x-nav-link href="{{ route('tasks.index') }}" :active="request()->routeIs('tasks.*')">
                         {{ __('Tasks') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('culture.index') }}" :active="request()->routeIs('culture.index')">
+                    <x-nav-link href="{{ route('culture.index') }}" :active="request()->routeIs('culture.*')">
                         {{ __('Culture') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link  href="{{ route('history.index') }}" :active="request()->routeIs('history.index')" >
+                    <x-nav-link  href="{{ route('history.index') }}" :active="request()->routeIs('history.*')" >
                     {{-- :active="request()->routeIs('culture.index')"> --}}
                         {{ __('Historical Data') }}
                     </x-nav-link>
@@ -42,14 +42,14 @@
                 @endif
                 @if (auth()->user()->classification_name=="smt" ||auth()->user()->classification_name=="tmt")
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('supervisees.index') }}" :active="request()->routeIs('supervisees.index')">
+                    <x-nav-link href="{{ route('supervisees.index') }}" :active="request()->routeIs('supervisees.*')">
                         {{ __('Submissions') }}
                     </x-nav-link>
                 </div>
                 @endif
                 @if (auth()->user()->groupId==53)
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('quarter.index') }}" :active="request()->routeIs('quarter.index')">
+                    <x-nav-link href="{{ route('quarter.index') }}" :active="request()->routeIs('quarter.*')">
                         {{ __('Quarters') }}
                     </x-nav-link>
                 </div>
@@ -57,7 +57,7 @@
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-               
+
             <!-- Settings Dropdown -->
                 <div class="ms-3 relative">
                     <x-dropdown align="right" width="48">
@@ -132,12 +132,12 @@
             </x-responsive-nav-link>
         </div>
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('tasks.index') }}" :active="request()->routeIs('tasks.index')">
+            <x-responsive-nav-link href="{{ route('tasks.index') }}" :active="request()->routeIs('tasks.*')">
                 {{ __('Tasks') }}
             </x-responsive-nav-link>
         </div>
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('culture.index') }}" :active="request()->routeIs('culture.index')">
+            <x-responsive-nav-link href="{{ route('culture.index') }}" :active="request()->routeIs('culture.*')">
                 {{ __('Culture') }}
             </x-responsive-nav-link>
         </div>

@@ -69,7 +69,10 @@ Route::middleware(['auth', 'staff'])->group(function () {
     Route::post("show/deptreport", [ReportController::class, 'show_departmental_report'])->name("deptreports.show");
 
     Route::resource("attachments", AttachmentsController::class);
-    Route::get("subtask/attachments/{id}", [AttachmentsController::class, "showSubtaskAttachments"])->name('subtask.attachments');
+    Route::get("task/attachments/{id}", [AttachmentsController::class, "showTaskAttachments"])->name('task.attachments');
+
+    Route::patch("task.score/{task}", [TaskController::class, "score"])->name("task.score");
+    // Route::patch("task.score/{task}", [TaskController::class, "score"])->name("task.score");
 
     Route::resource("tasks.comments", CommentsController::class);
     // Route::get("task/attachments/{id}", [AttachmentsController::class, "comments"])->name('subtask.attachments');
@@ -94,7 +97,7 @@ Route::middleware(['auth', 'staff'])->group(function () {
 
     Route::resource("tasks.subtasks", SubtaskController::class);
 
-    Route::get("tasks/subtasks/submit/{id}", [SubtaskController::class, "submit"]);
+    Route::get("task/submit/{id}", [SubtaskController::class, "submit"]);
 
     // Route::post('tasks/subtasks/approve/{id}', [TaskController::class, 'approve'])->name('tasks.subtasks.approve');
 });

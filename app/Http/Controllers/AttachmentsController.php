@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
-use App\Models\Subtask;
+use App\Models\Task;
 
 class AttachmentsController extends Controller
 {
@@ -34,25 +34,26 @@ class AttachmentsController extends Controller
     {
         $request->validate([
             'pdf' => 'required|max:10000', // 10MB Max
-            'subtaskId' => 'required',
-            'subtask_title' => 'required|string',
+            'taskId' => 'required',
+            'task_title' => 'required|string',
         ]);
 
         try {
             $file = $request->file('pdf');
-            $newTitle = str_replace(" ", "_", $request->subtask_title);
+            $newTitle = str_replace(" ", "_", $request->task_title);
             $filename = $newTitle . '_' . $file->getClientOriginalName();
             $path = $file->storeAs('public/pdfs', $filename);
 
             // Save file information to the database
             Attachments::create([
-                'subtask_id' => $request->subtaskId,
+                'task_id' => $request->taskId,
                 'file_name' => $filename,
                 'link' => Storage::url($path),
             ]);
-            smilify('success', 'PDF uploaded successfully.');
+            smilify('success', 'Attachment uploaded successfully.');
             return back();
         } catch (\Exception $e) {
+            dd($e);
             smilify('error', 'An error occurred while uploading the file.');
             return back();
         }
@@ -93,7 +94,6 @@ class AttachmentsController extends Controller
         return response($file, 200)
             ->header('Content-Type', $mimeType)
             ->header('Content-Disposition', $disposition . '; filename="' . $attachment->file_name . '"');
-
     }
 
 
@@ -116,11 +116,11 @@ class AttachmentsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-   public function destroy(Attachments $attachment)
+    public function destroy(Attachments $attachment)
     {
         // Get the relative path for deletion
         $filePath = 'public/pdfs/' . $attachment->file_name;
-    
+
         // Check if the file exists in storage
         if (Storage::exists($filePath)) {
             // Delete the file from storage
@@ -129,19 +129,19 @@ class AttachmentsController extends Controller
             smilify('error', 'File not found, it may have already been deleted.');
             return back();
         }
-    
+
         // Delete the attachment record from the database
         $attachment->delete();
-    
+
         smilify('success', 'Attachment deleted successfully.');
         return back();
     }
 
 
-    public function showSubtaskAttachments($subtaskId)
+    public function showTaskAttachments($taskId)
     {
-        $subtask = Subtask::where('id', $subtaskId)->first();
-        $attachments = $subtask->attachments()->get();
-        return view('attachments.attachment-display', ["attachments" => $attachments, "subtask" => $subtask]);
+        $task = Task::where('id', $taskId)->first();
+        $attachments = $task->attachments()->get();
+        return view('attachments.attachment-display', ["attachments" => $attachments, "task" => $task]);
     }
 }

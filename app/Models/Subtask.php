@@ -20,9 +20,4 @@ class Subtask extends Model
     {
         return $this->belongsTo('App\Models\Task');
     }
-
-    public function attachments()
-    {
-        return $this->hasMany(Attachments::class);
-    }
 }

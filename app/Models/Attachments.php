@@ -11,12 +11,12 @@ class Attachments extends Model
     protected $table = 'attachments';
     protected $fillable = [
         'link',
-        'subtask_id',
+        'task_id',
         'file_name',
     ];
 
-    public function subtask()
+    public function task()
     {
-        return $this->belongsTo('App\Models\Subtask');
+        return $this->belongsTo('App\Models\Task');
     }
 }

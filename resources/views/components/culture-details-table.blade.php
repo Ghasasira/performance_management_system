@@ -16,7 +16,7 @@
                     <tbody class="bg-white">
                         @foreach ($attributesArray as $attributes)
                             @foreach ($attributes as $key => $value)
-                                @if (!in_array($key, ['id', 'user_id', 'created_at', 'updated_at']))
+                                @if (!in_array($key, ['id', "quarter_id",'user_id', 'created_at', 'updated_at']))
                                 <tr>
                                     {{-- <td class="px-6 py-4 border-b border-gray-300">
                                         <div class="text-sm leading-5 text-gray-800">{{ $loop->parent->iteration }}</div>
@@ -27,7 +27,7 @@
                                     <td class="px-2 md:px-6 py-1 border-b border-gray-300">{{ ucfirst($value) }}/10</td>
                                 </tr>
                                 @endif
-                            @endforeach  
+                            @endforeach
                         @endforeach
                     </tbody>
                 </table>

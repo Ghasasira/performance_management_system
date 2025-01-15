@@ -20,8 +20,8 @@
             @csrf
 
             <div class="block">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                <x-label for="username" value="{{ __('Email') }}" />
+                <x-input id="username" class="block mt-1 w-full" type="email" name="username" :value="old('username')" required autofocus autocomplete="username" />
             </div>
 
             <div class="flex items-center justify-end mt-4">

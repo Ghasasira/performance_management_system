@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>KPIs</title>
     <link rel="icon" type="image/x-icon" href="assets/Asset.ico">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet">
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -70,7 +70,7 @@
             </h4>
         </div>
         <div class="custom-card">
-            
+
             @if (Route::has('login'))
                 <div class="">
                     @auth
@@ -80,22 +80,22 @@
                             </button>
                         </a>
                     @else
-                        <a href="{{ route('login') }}" class="custom-link">
-                            <button class="btn btn-primary custom-button m-2">
-                                Log in
-                            </button>
-                        </a>
+                        <div class="">
+                            <div class="flex justify-center w-full">
+                                <a href="{{ route('login') }}" class="custom-link">
+                                    <button class="btn btn-primary px-4 custom-button m-2">
+                                        Log in
+                                    </button>
+                                </a>
+                            </div>
 
-                        @if (Route::has('register'))
-                        <!--{{ route('register') }}-->
-                            <a href="#" class="custom-link">
-                                <button class="btn btn-danger custom-button m-2">
-                                    Register
-                                </button>
-                            </a>
-                        @endif
+
+                        </div>
                     @endauth
                 </div>
+                {{-- <p>lets roll</p> --}}
+
+
             @endif
         </div>
     </div>

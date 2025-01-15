@@ -61,17 +61,23 @@ class TasksTable extends Component
 
     public function store()
     {
+        dd("weeeeeeeeeeeeee");
         $this->validate();
 
         $quarter = Quarter::where('is_active', true)->first();
 
         if ($quarter) {
+            if ($this->has('deadline')) {
+                $taskDeadline = $this->deadline;
+            } else {
+                $taskDeadline = $quarter->end_date; // Use quarter end date if deadline is not provided
+            }
             try {
                 Task::create([
                     'title' => $this->title,
                     'description' => $this->description,
                     'weight' => $this->weight,
-                    'deadline' => $this->deadline,
+                    'deadline' => $taskDeadline,
                     'user_id' => $this->user->id,
                     'quarter_id' => $quarter->id,
                 ]);
@@ -113,7 +119,7 @@ class TasksTable extends Component
             ]);
 
             $this->resetForm();
-            smilify('success', 'Task updated successfully!');
+            smilify('success', 'Task updated success-fully!');
         } catch (\Exception $e) {
             smilify('error', 'An error occurred while updating the task.');
         }

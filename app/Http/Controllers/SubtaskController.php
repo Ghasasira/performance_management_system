@@ -29,7 +29,7 @@ class SubtaskController extends Controller
     public function create($taskId)
     {
 
-        // return view("tasks.create-subtask",['taskId'=>$taskId]);   
+        // return view("tasks.create-subtask",['taskId'=>$taskId]);
     }
 
     /**
@@ -49,8 +49,8 @@ class SubtaskController extends Controller
             'weight' => $validated['weight'],
 
         ]);
-        $this->taskService->calculateTaskScore($taskId);
-        smilify('success', 'Process Successful');
+        // $this->taskService->calculateTaskScore($taskId);
+        smilify('success', 'Subtask created Successfully.');
         return back();
     }
     /**
@@ -99,36 +99,6 @@ class SubtaskController extends Controller
         $currentSubtask->save();
 
         $this->taskService->calculateTaskScore($currentSubtask->task_id);
-        // calculateTaskScore($currentSubtask->task_id);
-
-        // // Find the parent task
-        // $task = Task::find($currentSubtask->task_id);
-        // if (!$task) {
-        //     smilify('error', 'Task not found');
-        //     return redirect()->back();
-        // }
-
-        // // Calculate the total weight and weighted score of all subtasks
-        // $totalSubTaskWeight = $task->subtasks->sum('weight');
-        // $totalWeightedScore = $task->subtasks->sum('score');
-
-        // // Calculate the new task score
-        // if ($totalSubTaskWeight > 0) {
-        //     $new_task_score =  $task->weight * ($totalWeightedScore / $totalSubTaskWeight);
-        // } else {
-        //     $new_task_score = 0;
-        // }
-
-        // // Check if all subtasks are approved
-        // if ($task->subtasks->every(fn($subtsk) => $subtsk->status === 'approved')) {
-        //     $task->status = "completed";
-        // } else {
-        //     $task->status = "InProgress";
-        // }
-
-        // // Update task score and status
-        // $task->score = $new_task_score;
-        // $task->save();
 
         // Success message
         smilify('success', 'Process Successful');
@@ -148,16 +118,11 @@ class SubtaskController extends Controller
                 smilify('error', 'Subtask not found');
                 return redirect()->back();
             }
-            // Find the task by ID
-            // $task = Task::findOrFail($taskId);
-
-            // // Delete all subtasks related to the task
-            // $task->subtasks()->delete();
 
             // // Delete the task
             $currentSubtask->delete();
 
-            $this->taskService->calculateTaskScore($currentSubtask->task_id);
+            // $this->taskService->calculateTaskScore($currentSubtask->task_id);
 
             smilify('success', 'Subtask deleted successfully.');
             return back();
@@ -170,11 +135,15 @@ class SubtaskController extends Controller
 
     public function submit($id)
     {
-        $subtask = Subtask::find($id);
-        $subtask->status = "Submitted";
-        $subtask->save();
-        smilify('success', 'Process Successful');
-        return back();
+        try {
+            $subtask = Subtask::find($id);
+            $subtask->status = "Submitted";
+            $subtask->save();
+            smilify('success', 'Process Successful');
+            return back();
+        } catch (\Exception $e) {
+            smilify('error', 'An error occurred while submitting the task and its subtasks.');
+        }
     }
 
     public function approve(Request $request, $subtaskId) {}

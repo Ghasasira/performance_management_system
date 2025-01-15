@@ -46,26 +46,44 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'weight' => 'required|integer',
-            'deadline' => 'required|date',
+            'deadline' => 'nullable|date',
             // "user_id" => 'required',
         ]);
 
-        $quarter = Quarter::where('is_active', true)->first();;
+        $quarter = Quarter::where('is_active', true)->first();
+
+        // dd($request->deadline);
 
         if ($quarter) {
-            $input = $request->all();
-            $input['user_id'] = auth()->user()->userId;
-            $input['quarter_id'] = $quarter->id;
+            $taskData = [
+                'title' => $request->title,
+                'description' => $request->description,
+                'weight' => $request->weight,
+                'user_id' => auth()->user()->userId,
+                'quarter_id' => $quarter->id,
+                'deadline' => $request->deadline != null ? $request->deadline : $quarter->end_date,
+            ];
+            // $input = $request->all();
+            // $input['user_id'] = auth()->user()->userId;
+            // $input['quarter_id'] = $quarter->id;
+
+            // if ($request->has('deadline')) {
+            //     $taskData['deadline'] = $request->deadline;
+            //     // dd("......given......");
+            // } else {
+            //     $taskData['deadline'] = $quarter->end_date; // Use quarter end date if deadline is not provided
+            //     dd("......not given......");
+            // }
 
             try {
-                $quarter->tasks()->create($input);
+                $quarter->tasks()->create($taskData);
 
                 smilify('success', 'Process Successful');
                 return back();
             } catch (\Exception $e) {
                 // Handle creation errors (e.g., log the error, display a user-friendly message)
                 smilify('error', 'Process Unsuccessful');
-                return $e;
+                return back();
                 //  back();
             }
         }
@@ -102,7 +120,7 @@ class TaskController extends Controller
             // Update the task
             $task->update($request->all());
             $task->save();
-            smilify('success', 'Task status updated successfully.');
+            smilify('success', 'Task updated successfully.');
             return back();
         } catch (\Exception $e) {
             smilify('error', 'An error occurred while updating the task.');
@@ -186,7 +204,7 @@ class TaskController extends Controller
         // Find the subtask by ID
         $currentTask = Task::find($task);
         if (!$task) {
-            smilify('error', 'Subtask not found');
+            smilify('error', 'Task not found');
             return redirect()->back();
         }
 
@@ -210,7 +228,7 @@ class TaskController extends Controller
         // $this->taskService->calculateTaskScore($currentSubtask->task_id);
         // calculateTaskScore($currentSubtask->task_id);
 
-        smilify('success', 'Process Successful');
+        smilify('success', 'Scores awarded Successfully');
         return back();
     }
 

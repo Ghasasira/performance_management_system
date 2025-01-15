@@ -20,7 +20,7 @@ class Taskss extends Component
         'title' => 'required|string|max:255',
         'description' => 'required|string',
         'weight' => 'required|integer',
-        'deadline' => 'required|date',
+        'deadline' => 'date',
         'status' => 'required|string',
     ];
 
@@ -106,7 +106,7 @@ class Taskss extends Component
             ]);
 
             $this->resetForm();
-            smilify('success', 'Task updated successfully!');
+            smilify('success', 'Task update-d successfully!');
         } catch (\Exception $e) {
             smilify('error', 'An error occurred while updating the task.');
         }

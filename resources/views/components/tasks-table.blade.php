@@ -202,7 +202,7 @@
                                 </span>
                               </div>
                               <div class="">
-                                <div class="text-sm leading-5 text-gray-800 font-medium">{{ $item->title }}</div>
+                                <div class="text-sm leading-5 text-blue-500 font-medium">{{ $item->title }}</div>
                                 </div>
                             </div>
                             </div>
@@ -222,7 +222,7 @@
                             <div class="text-sm leading-5 text-gray-600 ml-2">Deadline: <span class="font-bold text-black">{{ $item->deadline }}</span></div>
                         </div>
                         <div class="text-sm leading-5 text-gray-600 mt-2">{{ $item->description }}</div>
-                        <div class="mt-2">
+                        {{-- <div class="mt-2">
                             <div class="progress">
                                 @php
                                    $percentage = ($item->score / $item->weight) * 100;
@@ -239,7 +239,7 @@
                                 <div class="progress-bar {{ $progressBarClass }}" role="progressbar" style="width: {{ $percentage }}%" aria-valuenow="{{ $item->score }}" aria-valuemin="0" aria-valuemax="{{ $item->score }}">
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </a>
             @endforeach
@@ -302,9 +302,15 @@
                             </div>
                             </div>
                             <div class="flex flex-col">
-                            <label class="leading-loose">Deadline</label>
-                            <input type="date" id="deadline" name="deadline" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" placeholder="deadline" required>
-
+                                <label class="leading-loose">Deadline (Optional)</label>
+                                <input
+                                    type="date"
+                                    id="deadline"
+                                    name="deadline"
+                                    class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+                                    placeholder="deadline"
+                                    optional
+                                >
                             </div>
                         </div>
                     </div>

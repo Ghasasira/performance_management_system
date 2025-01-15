@@ -1,6 +1,6 @@
 <div class="p-6 lg:p-8 bg-white border-b border-gray-200 overflow-x-auto">
     <div>
-        <h1 class="mt-8 text-2xl font-medium text-gray-900 mt-2 mb-5">
+        <h1 class="mt-8 text-2xl font-medium text-blue-500 mt-2 mb-5">
             {{$task->title}}
         </h1>
     </div>
@@ -24,10 +24,14 @@
 
         <div class="-my-4 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 pr-10 lg:px-8">
             <div class="flex justify-between w-full">
-                <h3 class="mt-3 mb-3 text-2xl font-medium text-gray-900">SubTasks</h3>
+                <h3 class="mt-3 mb-3 text-xl font-medium text-blue-500">SubTasks</h3>
                 <div class="mt-3 mb-3">
                     <x-secondary-button data-bs-toggle="modal" data-bs-target="#addSubTaskModal" class="hidden sm:block">
                         {{ __('Add New Subtask') }}
+                    </x-secondary-button>
+
+                    <x-secondary-button data-bs-toggle="modal" data-bs-target="#addSubTaskModal" class="md:hidden">
+                        {{ __('Add') }}
                     </x-secondary-button>
                 </div>
             </div>
@@ -48,7 +52,7 @@
                             <tr>
                                 {{-- @foreach(['No.', 'Sub Task', 'Weight', 'Score', 'Status', ''] as $heading) --}}
 
-                                @foreach(['No.', 'Sub Task', '',''] as $heading)
+                                @foreach(['No.', 'Sub Task', ''] as $heading)
                                 <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">{{$heading}}</th>
                                 @endforeach
                             </tr>
@@ -64,56 +68,41 @@
                                 </td>
                                 <td class="whitespace-no-wrap">
                                     <div class="inline-flex items-center">
-                                        <label
-                                        class="relative flex cursor-pointer items-center rounded-full p-3"
-                                        for="checkbox-1"
-                                        data-ripple-dark="true"
-                                        >
-                                        <input
-                                            type="checkbox"
-                                            class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-pink-500 checked:bg-pink-500 checked:before:bg-pink-500 hover:before:opacity-10"
-                                            id="checkbox-1"
-                                            @checked($subtask->status === 'Submitted')
-                                        />
+                                        <form action="{{ route('subtasks.submit', [$subtask->id]) }}" method="POST">
+                                            @csrf
+                                            <label
+                                                class="relative flex cursor-pointer items-center rounded-full p-3"
+                                                for="checkbox-{{ $subtask->id }}"
+                                                data-ripple-dark="true"
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    name="status"
+                                                    class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-pink-500 checked:bg-pink-500 checked:before:bg-pink-500 hover:before:opacity-10"
+                                                    id="checkbox-{{ $subtask->id }}"
+                                                    value="Submitted"
+                                                    @checked($subtask->status === 'Submitted')
+                                                    onchange="this.form.submit()"
+                                                />
+                                            </label>
+                                        </form>
+
                                         <div>
+
+                                            {{-- delete button --}}
                                             <form action="{{ route('tasks.subtasks.destroy', [$task->id, $subtask->id]) }}" method="POST" onsubmit="return confirm('Are You sure you want to delete subtask?');">
                                                 {{-- <div name="trigger"> --}}
-                                                <div class="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none transition">
-                                                        {{-- <img src="\assets\delete.svg" alt="Icon description" class="h-16">                                              --}}
-                                                        <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        class="h-3.5 w-3.5"
-                                                        viewBox="0 0 20 20"
-                                                        fill="currentColor"
-                                                        stroke="currentColor"
-                                                        stroke-width="1"
-                                                        >
-                                                        <path
-                                                            fill-rule="evenodd"
-                                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                            clip-rule="evenodd"
-                                                        ></path>
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </form>
-                                            {{-- <a href="{{ url('task/'.$task->id.'/subtask/delete/'.$subtask->id) }}">
 
-                                            </a> --}}
+                                                <button type="submit" class="rounded p-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zm2-4h2V8H9zm4 0h2V8h-2z"/></svg>
+                                                </button>
+                                            </form>
                                         </div>
-                                        </label>
+
                                     </div>
 
-                                </td>
-                                <td>
-                                    <button>
-                                        <div>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zm2-4h2V8H9zm4 0h2V8h-2z"/></svg>
-                                        </div>
-                                    </button>
                                 </td>
                             </tr>
                             @endforeach
@@ -130,10 +119,13 @@
     <div class="w-full px-1 border-left border-blue-500">
         <div class="-my-4 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 pr-10 lg:px-8">
             <div class="flex justify-between w-full">
-                <h3 class="mt-3 mb-3 text-2xl font-medium text-gray-900">Attachments</h3>
+                <h3 class="mt-3 mb-3 text-xl font-medium text-blue-500">Attachments</h3>
                 <div class="mt-3 mb-3">
                     <x-secondary-button data-bs-toggle="modal" data-bs-target="#addAttachmentModal" class="hidden sm:block">
                         {{ __('Add Attachment') }}
+                    </x-secondary-button>
+                    <x-secondary-button data-bs-toggle="modal" data-bs-target="#addAttachmentModal" class="md:hidden">
+                        {{ __('Add') }}
                     </x-secondary-button>
                 </div>
             </div>
@@ -182,9 +174,10 @@
 
     </div>
 
+
     {{-- @if (strtolower($task->status) != 'pending') --}}
         <div class="w-full flex justify-end p-2" >
-            @if (strtolower($task->status) == 'inprogress' || strtolower($task->status) == 'inprogress')
+            @if (strtolower($task->status) == 'pending' || strtolower($task->status) == 'inprogress')
                 <a href="{{ url('task/submit/'.$task->id) }}">
                     <button class="rounded-lg bg-blue-500 py-2 px-2 font-sans font-bold uppercase text-white shadow-md transition-all hover:shadow-lg focus:opacity-85 active:opacity-85">
                         Submit

@@ -18,6 +18,7 @@ use App\Http\Controllers\QuarterController;
 use App\Http\Controllers\AttachmentsController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\PasswordResetController;
 use App\Models\Quarter;
 
 
@@ -35,6 +36,9 @@ use App\Models\Quarter;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name("pwdreset");
+Route::get('/forgotten-password', [PasswordResetController::class, 'forgottenPassword']);
 
 Route::middleware([
     'auth:sanctum',
@@ -96,8 +100,9 @@ Route::middleware(['auth', 'staff'])->group(function () {
     Route::resource("department.subdepartment", SubdepartmentController::class);
 
     Route::resource("tasks.subtasks", SubtaskController::class);
+    Route::post("subtasks/submit/{id}", [SubtaskController::class, "submit"])->name("subtasks.submit");
 
-    Route::get("task/submit/{id}", [SubtaskController::class, "submit"]);
+    Route::get("task/submit/{id}", [TaskController::class, "submit"]);
 
     // Route::post('tasks/subtasks/approve/{id}', [TaskController::class, 'approve'])->name('tasks.subtasks.approve');
 });

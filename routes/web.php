@@ -38,7 +38,7 @@ Route::get('/', function () {
 });
 
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name("pwdreset");
-Route::get('/forgotten-password', [PasswordResetController::class, 'forgottenPassword']);
+Route::get('/forgotten-password', [PasswordResetController::class, 'forgottenPassword'])->name("forgotten.password");
 
 Route::middleware([
     'auth:sanctum',
@@ -104,13 +104,16 @@ Route::middleware(['auth', 'staff'])->group(function () {
 
     Route::get("task/submit/{id}", [TaskController::class, "submit"]);
 
+
+    Route::resource("supervisees", StaffSubmissionsController::class);
+
     // Route::post('tasks/subtasks/approve/{id}', [TaskController::class, 'approve'])->name('tasks.subtasks.approve');
 });
 
 
 
 
-Route::resource("supervisees", StaffSubmissionsController::class)->middleware('auth');
+// Route::resource("supervisees", StaffSubmissionsController::class);
 
 // Route::resource("culture", CultureController::class);
 

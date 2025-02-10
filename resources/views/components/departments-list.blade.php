@@ -3,21 +3,23 @@
         {{-- <h1 class="mt-8 text-2xl font-medium text-gray-900 mb-5">
             Departments
         </h1> --}}
-        <div class="h-10" >
+        {{-- <div class="h-10" >
             <x-secondary-button data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
                 {{ __('Add Department') }}
             </x-secondary-button>
-        </div>
-        
+        </div> --}}
+
     </div>
     @if (count($data)>0)
     <div class="flex justify-between inline-block min-w-full bg-white shadow-dashboard px-8 pt-3 rounded-bl-lg rounded-br-lg">
         {{-- sm:items-start sm:justify-between flex-col --}}
-        <div class="sm:flex-1 sm:flex mt-2 mb-4 work-sans flex flex-wrap"> 
+        {{-- <div class="grid sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-6 w-full"> --}}
+        <div class="w-full flex items-center justify-center flex-wrap">
+
             @foreach ($data as $department )
-            
-            <div class="mt-1 p-2 w-fit p-2 lg:mt-0 lg:flex-shrink-0">
-                <div class="rounded-2xl bg-gray-50 py-6 text-center ring-1 ring-inset ring-gray-900/5 lg:flex lg:flex-col lg:justify-center lg:py-10">
+
+            <div class="mt-1 p-2 w-[150px] p-2 lg:mt-0 lg:flex-shrink-0">
+                <div class="rounded-2xl bg-white h-[250px] text-center flex flex-col justify-center shadow-lg">
                     <div class="mx-auto max-w-xs px-6">
                         {{-- <p class="text-base font-semibold text-gray-600"></p> --}}
                         <p class="mt-4 flex flex-wrap items-baseline justify-center gap-x-2">
@@ -32,7 +34,7 @@
 
             @endforeach
         </div>
-        
+
     </div>
 </div>
     @else
@@ -40,9 +42,9 @@
             <h1 class="text-blue-600 hover:underline">
                 Nothing to show here
             </h1>
-        </div> 
+        </div>
     @endif
-        
+
     <!-- New Department Modal -->
     <div class="modal fade" id="addDepartmentModal" tabindex="-1" aria-labelledby="addDepartmentModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -59,7 +61,7 @@
                             @foreach ($users as $user )
                             <option value= {{$user->id}}> {{$user->first_name}} {{$user->last_name}} </option>
                             @endforeach
-                            
+
                         </select>
                     </div>
                     <div class="modal-footer">
@@ -71,6 +73,6 @@
         </div>
     </div>
 
-    
+
 
 </div>

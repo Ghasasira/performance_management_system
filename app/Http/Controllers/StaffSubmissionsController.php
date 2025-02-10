@@ -35,7 +35,11 @@ class StaffSubmissionsController extends Controller
             if ($currentUser->classification_name == "tmt") {
                 // Fetch all users classified as normal users (exclude SMTs and TMTs)
                 $supervisees = User::where('department_id', $currentUser->department_id)
-                    ->whereIn('classification_name', ['smt', 'tmt', " "])
+                    // ->whereIn('classification_name', ['smt', '', " "])
+                    ->where(function ($query) {
+                        $query->whereNull('classification_name')
+                            ->orWhereNotIn('classification_name', ['tmt']);
+                    })
                     ->where('userId', "!=", $currentUser->userId)
                     ->with('job')
                     ->get();
@@ -84,8 +88,20 @@ class StaffSubmissionsController extends Controller
      */
     public function show(User $supervisee)
     {
+        // Step 1: Fetch the active quarter
+        $activeQuarter = Quarter::where('is_active', true)->first();
+
+        // Debugging: Check if active quarter exists
+        if (!$activeQuarter) {
+            return abort(404, 'No active quarter found');
+        }
+
         // Find the user along with their tasks and subtasks
-        $user = User::with('tasks.subtasks')->find($supervisee->userId);
+        // $user = User::with('tasks.subtasks')->find($supervisee->userId);
+
+        $user = User::with(['tasks' => function ($query) use ($activeQuarter) {
+            $query->where('quarter_id', $activeQuarter->id)->with('subtasks');
+        }])->find($supervisee->userId);
 
         // Check if user is found (optional)
         if (!$user) {

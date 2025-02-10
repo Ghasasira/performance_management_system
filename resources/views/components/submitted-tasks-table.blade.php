@@ -74,6 +74,10 @@
                                     </div>
                                     <div class="modal-body">
                                         <input type="number" name="score" placeholder="Score" class="block text-sm py-3 px-4 rounded-lg w-full border outline-purple-500" />
+                                        <div class=" flex text-sm text-blue-600 mt-1 mb-2">
+                                            {{-- <span class="font-medium text-red-400">Hint!:::</span> --}}
+                                            Task to be scored out of {{$item["task"]->weight}}.
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

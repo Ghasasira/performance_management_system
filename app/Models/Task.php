@@ -15,6 +15,8 @@ class Task extends Model
         'description',
         'weight',
         'deadline',
+        'is_locked',
+        'is_admin_locked',
 
     ];
 
@@ -23,9 +25,31 @@ class Task extends Model
     //     $this->attributes['user_id'] = auth()->id();
     // }
 
+    protected $casts = [
+        'is_locked' => 'boolean',
+        'is_admin_locked' => 'boolean',
+    ];
+
+    // Methods to check lock status
+    public function isUserLocked()
+    {
+        return $this->is_locked;
+    }
+
+    public function isAdminLocked()
+    {
+        return $this->is_admin_locked;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'userId');
+    }
+
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachments::class);
     }
 
     public function subtasks()
@@ -33,13 +57,14 @@ class Task extends Model
         return $this->hasMany(Subtask::class);
     }
 
-    public function attachments()
-    {
-        return $this->hasMany(Attachments::class);
-    }
-
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    // Define the relationship with the Quarter model
+    public function quarter()
+    {
+        return $this->belongsTo(Quarter::class);
     }
 }

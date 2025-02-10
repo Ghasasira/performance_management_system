@@ -45,5 +45,4 @@ class Quarter extends Model
     {
         return $this->hasMany(Excellence::class);
     }
-
 }

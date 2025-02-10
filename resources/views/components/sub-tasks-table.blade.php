@@ -176,7 +176,7 @@
 
 
     {{-- @if (strtolower($task->status) != 'pending') --}}
-        <div class="w-full flex justify-end p-2" >
+        <div class="w-full flex justify-between p-2" >
             @if (strtolower($task->status) == 'pending' || strtolower($task->status) == 'inprogress')
                 <a href="{{ url('task/submit/'.$task->id) }}">
                     <button class="rounded-lg bg-blue-500 py-2 px-2 font-sans font-bold uppercase text-white shadow-md transition-all hover:shadow-lg focus:opacity-85 active:opacity-85">

@@ -29,7 +29,7 @@
     @if (count($data)>0)
            <!-- Table for larger screens -->
            <div class="hidden md:block align-middle inline-block min-w-full shadow overflow-x-auto bg-white shadow-dashboard md:px-8 pt-3 rounded-bl-lg rounded-br-lg">
-            <table class="min-w-full">
+            <table class="min-w-full overflow-x-auto">
                 <thead>
                     <tr>
                         <th class="px-2 py-3 border-b-2 border-gray-300 text-left leading-4 text-blue-500 tracking-wider">No.</th>
@@ -39,7 +39,8 @@
                         <th class="px-4 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">Score</th>
                         <th class="px-4 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">Status</th>
                         {{-- <th class="px-4 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">Progress</th> --}}
-                        <th class="px-4 py-3 border-b-2 border-gray-300"></th>
+                        <th class="px-2 py-3 border-b-2 border-gray-300"></th>
+                        <th class="px-2 py-3 border-b-2 border-gray-300"></th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
@@ -62,34 +63,38 @@
                             </td>
 
                             <td class="px-4 py-4 text-right border-b border-gray-500 text-sm leading-5">
-                                <div class="flex items-center justify-content-around">
+
 
                                 <!-- View Button -->
-                                <button type="button" class="text-white bg-green-500 hover:bg-green-900 rounded p-1 mx-1 h-10 w-10" aria-label="View Task"
+                                <button type="button" class="text-black hover:bg-green-900 rounded p-1 mx-1 h-10 w-10" aria-label="View Task"
                                     onclick="location.href = '{{ route('tasks.show', $data[$i]) }}'">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                                        <circle cx="16" cy="16" r="4" fill="white"/>
-                                        <path fill="white" d="M30.94 15.66A16.69 16.69 0 0 0 16 5A16.69 16.69 0 0 0 1.06 15.66a1 1 0 0 0 0 .68A16.69 16.69 0 0 0 16 27a16.69 16.69 0 0 0 14.94-10.66a1 1 0 0 0 0-.68M16 22.5a6.5 6.5 0 1 1 6.5-6.5a6.51 6.51 0 0 1-6.5 6.5"/>
+                                        <circle cx="16" cy="16" r="4" fill="black"/>
+                                        <path fill="black" d="M30.94 15.66A16.69 16.69 0 0 0 16 5A16.69 16.69 0 0 0 1.06 15.66a1 1 0 0 0 0 .68A16.69 16.69 0 0 0 16 27a16.69 16.69 0 0 0 14.94-10.66a1 1 0 0 0 0-.68M16 22.5a6.5 6.5 0 1 1 6.5-6.5a6.51 6.51 0 0 1-6.5 6.5"/>
                                     </svg>
                                 </button>
-
+                            </td>
+                            <td class="px-4 py-4 text-right border-b border-gray-500 text-sm leading-5">
+                            <div class="flex items-center justify-content-around">
                                 @if (strtolower($data[$i]->status)!=="approved")
 
-                                <!-- Edit Button -->
+
+                                @if ($data[$i]->is_locked === false)
                                 <div>
-                                    <button class=" h-10 w-10 p-1 mx-1 select-none rounded-lg text-white bg-blue-500 hover:bg-blue-700 align-middle font-sans text-xs font-medium uppercase transition-all active:bg-blue-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#editTask-{{ $data[$i]->id }}"
-                                        data-subtask-title="{{ $data[$i]->title }}"
-                                        data-subtask-id="{{ $data[$i]->id }}"
-                                        aria-label="Edit Task">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-8 h-6">
-                                            <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"></path>
-                                        </svg>
+                                    <button class=" h-10 w-10 p-1 mx-1 rounded-lg hover:bg-blue-700 align-middle font-sans text-xs font-medium uppercase transition-all active:bg-blue-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editTask-{{ $data[$i]->id }}"
+                                    data-subtask-title="{{ $data[$i]->title }}"
+                                    data-subtask-id="{{ $data[$i]->id }}"
+                                    aria-label="Edit Task">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="w-8 h-6 items-center text-black mx-auto">
+                                        <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"></path>
+                                    </svg>
                                     </button>
                                 </div>
+                                @endif
 
-                                <!--Edit Modal -->
+
                                     <div class="modal fade m-1 text-center" id="editTask-{{ $data[$i]->id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editTaskLabel-{{ $data[$i]->id }}" aria-hidden="true">
                                         <div class="modal-dialog">
                                         <div class="modal-content">
@@ -145,10 +150,10 @@
                                         </div>
                                     </div>
 
-                                @endif
 
 
-                                @if (strtolower($data[$i]->status)!=="approved")
+
+                                @if ($data[$i]->is_locked === false)
                                 {{-- delete button --}}
                                 <div>
                                     <form action="{{ route('tasks.destroy', [$data[$i]->id]) }}" method="POST" onsubmit="return confirm('Are You sure you want to delete task?');">
@@ -156,8 +161,8 @@
                                             @csrf
                                             @method('DELETE')
 
-                                        <button type="submit" class="text-white bg-red-500 hover:bg-red-700 rounded h-10 w-10">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 flex items-center text-white mx-auto" viewBox="0 0 20 20" fill="currentColor">
+                                        <button type="submit" class="text-black hover:bg-red-700 rounded h-10 w-10">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 flex items-center text-black mx-auto" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                             </svg>
                                         </button>
@@ -165,28 +170,7 @@
                                 </div>
                                 @endif
 
-                                {{-- @if (strtolower($data[$i]->status) != 'pending')
-                                    @if (strtolower($data[$i]->status) == 'approved')
-                                        <a href="{{ url('task/submit/'.$data[$i]->id) }}">
-                                            <button class="rounded-lg bg-blue-500 py-2 px-2 font-sans text-xs font-bold uppercase text-white shadow-md transition-all hover:shadow-lg focus:opacity-85 active:opacity-85">
-                                                Submit
-                                            </button>
-                                        </a>
-                                    @elseif (strtolower($data[$i]->status) == 'submitted')
-                                        <button class="rounded-lg bg-green-500 py-2 px-2 font-sans text-xs font-bold uppercase text-white shadow-md disabled:opacity-50">
-                                            Submitted
-                                        </button>
-                                    @elseif (strtolower($data[$i]->status) == 'graded')
-                                        <button class="rounded-lg bg-green-500 py-2 px-2 font-sans text-xs font-bold uppercase text-white shadow-md disabled:opacity-50">
-                                            Re-submit
-                                        </button>
-                                    @endif
-                                @endif --}}
-                                {{-- <button wire:click="delete({{ $data[$i]->id }})" class="text-white bg-red-500 hover:bg-red-700 rounded h-10 w-10">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 flex items-center text-white mx-auto" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
-                                </button> --}}
+                                @endif
 
 
                             </div>
@@ -210,6 +194,75 @@
                                 <span class="inline-block px-2 py-1 font-semibold text-green-900 leading-tight">
                                     <span aria-hidden class="bg-green-200 rounded-full px-2 py-1 text-xs">{{ $item->status }}</span>
                                 </span>
+                                {{-- <a href="#"> --}}
+                                    {{-- <button class="py-1 bg-green-500"
+                                    data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><circle cx="8" cy="2.5" r=".75"/><circle cx="8" cy="8" r=".75"/><circle cx="8" cy="13.5" r=".75"/></g></svg>
+                                </button> --}}
+                            {{-- </a> --}}
+
+                                <!-- Overlay Menu -->
+                                    <div
+                                    x-show="openMenuForTask === {{ $item->id }}"
+                                    x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 scale-90"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="transition ease-in duration-300"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-90"
+                                    class="absolute z-50 right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200"
+                                >
+                                    <div class="py-1">
+                                        <!-- View Button -->
+                                        <a
+                                            href="{{ route('tasks.show', $item) }}"
+                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                            View
+                                        </a>
+
+                                        <!-- Edit Button (conditionally rendered) -->
+                                        @if (!$item->is_locked)
+                                        <button
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editTask-{{ $item->id }}"
+                                            class="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                            Edit
+                                        </button>
+                                        @endif
+
+                                        <!-- Delete Button (conditionally rendered) -->
+                                        @if (!$item->is_locked)
+                                        <form
+                                            action="{{ route('tasks.destroy', [$item->id]) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('Are you sure you want to delete this task?');"
+                                            class="block"
+                                        >
+                                            @csrf
+                                            @method('DELETE')
+                                            <button
+                                                type="submit"
+                                                class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                                Delete
+                                            </button>
+                                        </form>
+                                        @endif
+                                    </div>
+                                </div>
+                                {{-- //////////////// --}}
                               </div>
                               <div class="">
                                 <div class="text-sm leading-5 text-blue-500 font-medium">{{ $item->title }}</div>

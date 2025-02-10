@@ -61,7 +61,6 @@ class TasksTable extends Component
 
     public function store()
     {
-        dd("weeeeeeeeeeeeee");
         $this->validate();
 
         $quarter = Quarter::where('is_active', true)->first();

@@ -3,7 +3,7 @@
         <h1 class="mt-8 text-2xl font-medium text-gray-900 mb-5">
             Submissions
         </h1>
-        
+
     </div> --}}
     <div class="hidden md:block align-middle inline-block min-w-full shadow overflow-x-auto bg-white shadow-dashboard md:px-8 pt-3 rounded-bl-lg rounded-br-lg">
         <table class="min-w-full">
@@ -24,17 +24,17 @@
                             <div class="text-sm leading-5 text-gray-800">{{ $i + 1 }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
-                            <div class="text-sm leading-5 text-blue-900">{{ $data[$i]->firstName }}</div>
+                            <div class="text-sm leading-5 text-blue-900">{{ strtoupper($data[$i]->firstName) }}</div>
                         </td>
-                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">{{ $data[$i]->lastName }}</td>
-                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">{{ $data[$i]->job->job_name }}</td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">{{ strtoupper($data[$i]->lastName) }}</td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">{{ strtoupper($data[$i]->job->job_name) }}</td>
                         <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">
                             <span class="relative inline-block px-2 py-1 font-semibold text-green-900 leading-tight">
                                 {{-- <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span> --}}
                                 {{-- <span class="relative text-xs">{{ $data[$i]->status }}</span> --}}
                             </span>
                         </td>
-                        
+
                         <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
                             <button class="px-5 py-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-700 hover:text-white focus:outline-none" type="button" onclick="location.href = '{{ route('supervisees.show', $data[$i]) }}'">View Submissions</button>
                         </td>
@@ -44,26 +44,3 @@
         </table>
     </div>
 
-    {{-- <div class="flex flex-row flex-wrap align-middle inline-block min-w-full min-h-screen shadow overflow-hidden bg-white shadow-dashboard px-8 pt-3 rounded-bl-lg rounded-br-lg">
-        @foreach ($data as $supervisee)
-            <!-- component -->
-            <div>
-                <a href = '{{ route('supervisees.show', $supervisee) }}'>
-                    <div class="relative flex m-2 flex-col rounded-xl bg-white text-gray-700 shadow-md w-32">  <div class="relative mx-2 mt-2 h-15 rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-                        <img src="https://th.bing.com/th/id/R.47cecf6ce91d73af7900067efeaacb63?rik=%2btKMy%2fBRVLblKA&pid=ImgRaw&r=0" alt="profile-picture" />
-                      </div>
-                      <div class="p-2 text-center">  <h4 class="mb-2 block font-sans text-lg font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-                          {{$supervisee->firstName}} {{$supervisee->lastName}}
-                        </h4>
-                        <p class="block bg-gradient-to-tr from-pink-600 to-pink-400 bg-clip-text font-sans text-sm font-medium leading-relaxed text-transparent antialiased">
-                            {{$supervisee->job->job_name}}
-                        </p>
-                      </div>
-                    </div>
-                    
-                </a>
-            </div>
-        @endforeach
-    </div> --}}
-
-{{-- </div> --}}

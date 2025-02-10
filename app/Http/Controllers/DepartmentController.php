@@ -52,10 +52,10 @@ class DepartmentController extends Controller
      */
     public function show(string $id)
     {
-        $users = User::all();
-        $dept = Department::with(['subdepartments', 'supervisor'])->find($id);
+        // $users = User::all();
+        $dept = Department::find($id);
         //$dept->load("subdepartments");
-        return view("departments.departments-details", ["dept" => $dept, "users" => $users]);
+        return view("departments.departments-details", ["dept" => $dept]);
     }
 
     /**

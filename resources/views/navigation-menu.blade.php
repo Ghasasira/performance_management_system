@@ -32,7 +32,7 @@
                         {{ __('Historical Data') }}
                     </x-nav-link>
                 </div>
-                @if (auth()->user()->groupId==53)
+                @if (auth()->user()->groupId==53 || auth()->user()->department_id == 3 || auth()->user()->department_id == 18)
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('department.index') }}" :active="request()->routeIs('department.index')">
                     {{-- :active="request()->routeIs('culture.index')"> --}}

@@ -10,6 +10,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 {{-- <x-tasks-table :data="$data" :user="$user" :quarter="$quarter"/> --}}
                 <livewire:tasks-table/>
+
                  {{-- :user="$user" /> --}}
             </div>
         </div>

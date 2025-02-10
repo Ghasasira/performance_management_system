@@ -18,16 +18,6 @@ class Department extends Model
         'name',
     ];
 
-    // public function supervisor()
-    // {
-    //     return $this->belongsTo(User::class, 'supervisor_id');
-    // }
-
-    // public function subdepartments()
-    // {
-    //     return $this->hasMany(Subdepartment::class, 'dept_id');
-    // }
-
     public function users()
     {
         return $this->hasMany(User::class);

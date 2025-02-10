@@ -3,9 +3,9 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use App\Models\Task;
 use App\Models\Quarter;
-use App\Models\Subtask;
 use Carbon\Carbon;
 
 class CheckDeadlines extends Command
@@ -40,27 +40,28 @@ class CheckDeadlines extends Command
             // $quarter->is_active = false;
             // $quarter->save();
 
+            $excludedStatuses = ['submitted', 'graded', 'deferred'];
 
             $tasks = $quarter->tasks()
                 // ->where('deadline', '<=', $now)
-                ->where('status', '!=', 'completed')
+                ->whereNotIn('status', $excludedStatuses)
                 ->get();
 
             foreach ($tasks as $task) {
                 // Perform necessary actions, e.g., mark as overdue, notify users, etc.
-                $task->status = 'overdue';
+                $task->status = 'submitted';
                 // $task->subtasks->status = 'submitted';
 
-                foreach ($task->subtasks as $subtask) {
-                    $subtask->status = 'submitted';
-                    $subtask->save();
-                }
+                // foreach ($task->subtasks as $subtask) {
+                //     $subtask->status = 'submitted';
+                //     $subtask->save();
+                // }
 
                 $task->save();
             }
         }
 
-        $this->info('Checked for deadlines.');
+        Log::info('Checked for deadlines.');
         return 0;
     }
 }

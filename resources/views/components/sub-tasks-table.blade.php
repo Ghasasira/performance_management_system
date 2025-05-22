@@ -116,7 +116,7 @@
 
     </div>
 
-    <div class="w-full px-1 border-left border-blue-500">
+    {{-- <div class="w-full px-1 border-left border-blue-500">
         <div class="-my-4 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 pr-10 lg:px-8">
             <div class="flex justify-between w-full">
                 <h3 class="mt-3 mb-3 text-xl font-medium text-blue-500">Attachments</h3>
@@ -132,7 +132,6 @@
         </div>
 
         <div class="align-middle inline-block min-h-1/4 min-w-full shadow overflow-x-auto bg-white shadow-dashboard px-8 pt-3 rounded-bl-lg rounded-br-lg">
-            {{-- attachments --}}
             @if($task->attachments->isEmpty())
                     <p class="flex justify-center text-red-500">No attachments found.</p>
                 @else
@@ -147,14 +146,12 @@
                                 />
                                 <a
                                     href="{{ route('attachments.show', $attachment)}}"
-                                    {{-- Storage::url($attachment->link) }}" --}}
                                     target="_blank"
                                     class="rounded bg-green-500 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white transition-all hover:shadow-lg hover:bg-green-600 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85]"
                                 >
                                     View
                                 </a>
                                 <form action="{{ route('attachments.destroy', $attachment) }}" method="POST" onsubmit="return confirm('Are You sure you want to delete attachment?');">
-                                    {{-- <div name="trigger"> --}}
                                         @csrf
                                         @method('DELETE')
 
@@ -172,12 +169,14 @@
         </div>
 
 
-    </div>
+    </div> --}}
+
+    <livewire:attachments-component :taskId="$task->id" />
 
 
     {{-- @if (strtolower($task->status) != 'pending') --}}
         <div class="w-full flex justify-between p-2" >
-            @if (strtolower($task->status) == 'pending' || strtolower($task->status) == 'inprogress')
+            @if (strtolower($task->status) == 'pending' || strtolower($task->status) == 'inprogress'|| strtolower($task->status) == 'approved')
                 <a href="{{ url('task/submit/'.$task->id) }}">
                     <button class="rounded-lg bg-blue-500 py-2 px-2 font-sans font-bold uppercase text-white shadow-md transition-all hover:shadow-lg focus:opacity-85 active:opacity-85">
                         Submit
@@ -195,7 +194,7 @@
                 </a>
             @endif
         </div>
-                                {{-- @endif --}}
+        {{-- @endif --}}
 
   </div>
 </div>
@@ -214,29 +213,6 @@
                     <input type="text" name="title" placeholder="Subtask Title" class="block text-sm py-3 px-4 rounded-lg w-full border outline-purple-500" required />
                     <input type="hidden" value=0 name="weight" placeholder="Weight" class="block text-sm py-3 px-4 rounded-lg w-full border outline-purple-500 mt-4" required />
                     {{-- <textarea name="description" placeholder="Description" class="block text-sm py-3 px-4 rounded-lg w-full border outline-purple-500 mt-4" required></textarea> --}}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- New Attachment Modal -->
-<div class="modal fade" id="addAttachmentModal" tabindex="-1" aria-labelledby="addAttachmentModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <form action="{{ route('attachments.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addAttachmentModalLabel">New Attachment</h1>
-                </div>
-                <div class="modal-body">
-                    <input type="file" name="pdf" id="pdf" class="form-control shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                    <input type="hidden" name="taskId" value="{{ $task->id }}">
-                    <input type="hidden" name="task_title" value="{{ $task->title }}">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

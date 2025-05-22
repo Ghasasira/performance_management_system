@@ -33,6 +33,11 @@ use App\Models\Quarter;
 |
 */
 
+
+Route::get("test/fileuploadsize", function () {
+    dd(phpinfo());
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -46,7 +51,8 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        $data = Quarter::where('is_active', false)->get();
+        $data = Quarter::get();
+        // where('is_active', false)->get();
         return view('dashboard', ["data" => $data]);
     })->name('dashboard');
 });
@@ -70,6 +76,9 @@ Route::middleware(['auth', 'staff'])->group(function () {
     Route::post("show/report", [ReportController::class, 'show_report'])->name("reports.show");
 
     // ############################
+    Route::post("show/compreport", [ReportController::class, 'show_overall_report'])->name("compreports.show");
+    Route::post("show/mgtreport", [ReportController::class, 'show_management_report'])->name("mgtreports.show");
+
     Route::post("show/deptreport", [ReportController::class, 'show_departmental_report'])->name("deptreports.show");
 
     Route::resource("attachments", AttachmentsController::class);

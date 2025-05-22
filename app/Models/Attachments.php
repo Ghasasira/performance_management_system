@@ -13,6 +13,7 @@ class Attachments extends Model
         'link',
         'task_id',
         'file_name',
+        'description',
     ];
 
     public function task()

@@ -40,7 +40,7 @@
                     </x-nav-link>
                 </div>
                 @endif
-                @if (auth()->user()->classification_name=="smt" ||auth()->user()->classification_name=="tmt")
+                @if (auth()->user()->classification_name=="smt" ||auth()->user()->classification_name=="tmt" ||auth()->user()->classification_name=="exco")
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('supervisees.index') }}" :active="request()->routeIs('supervisees.*')">
                         {{ __('Submissions') }}

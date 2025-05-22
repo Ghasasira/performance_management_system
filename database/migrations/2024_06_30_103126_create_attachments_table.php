@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('file_name');
             $table->string('link');
+            $table->mediumText("description")->nullable();
             $table->foreignIdFor(App\Models\Task::class)->constrained();
             $table->timestamps();
         });

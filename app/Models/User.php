@@ -82,10 +82,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(Staff::class);
     }
-
     public function tasks()
     {
         return $this->hasMany(Task::class, 'user_id', 'userId');
+    }
+
+    public function hasSubmittedTasks(): bool
+    {
+        // Assuming you have a `tasks` relationship and a `status` column in the tasks table
+        return $this->tasks()->where('status', 'submitted')->exists();
     }
 
     public function culture()

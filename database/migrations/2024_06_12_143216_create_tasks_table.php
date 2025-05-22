@@ -17,6 +17,9 @@ return new class extends Migration
             $table->integer("weight");
             $table->mediumText('description');
             $table-> date('deadline');
+            $table->boolean("is_locked")->nullable()->default(false);
+            $table->boolean("is_admin_locked")->nullable()->default(false);
+            $table->boolean("is_approved")->nullable()->default(false);
             $table->string("status")->nullable()->default('pending');
             $table->integer('score')->nullable()->default(0);
             $table->foreignIdFor(App\Models\User::class)->constrained();

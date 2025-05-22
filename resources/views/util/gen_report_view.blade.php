@@ -72,7 +72,7 @@
                />
              </svg>
              @endif
-                
+
                 <div class="text-center">
                   <h2 class="text-4xl font-bold pb-2">{{$data['average_department_culture_score']}}/30</h2>
                   <h4 class="inline text-gray-500 text-md">Avarage Culture Score</h4>
@@ -190,7 +190,7 @@
           {{-- </section> --}}
 
         <div class="min-w-full p-4">
-        <table class="min-w-full ">
+        <table id="reportTable" class="min-w-full ">
             <thead>
                 <tr>
                     {{-- <th class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-blue-500 tracking-wider">No.</th> --}}
@@ -200,13 +200,13 @@
                     <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">Culture</th>
                     <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">Performance</th>
                     <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 text-blue-500 tracking-wider">Total</th>
-                    <th class="px-6 py-3 border-b-2 border-gray-300"></th>
+                    {{-- <th class="px-6 py-3 border-b-2 border-gray-300"></th> --}}
                 </tr>
             </thead>
             <tbody class="bg-white">
                 @foreach ($data["report"] as $reportdata )
                     <tr>
-                        
+
                         <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">
                             <div class="text-sm leading-5 text-blue-900">{{ $reportdata["firstname"]}}</div>
                         </td>
@@ -217,18 +217,28 @@
                         <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">{{ $reportdata["cultureScore"] }}</td>
                         <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">{{ $reportdata["performanceScore"] }}</td>
                         <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5">{{ $reportdata["overallScore"] }}</td>
-                                                
-                        <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
-                            <button class="px-5 py-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-700 hover:text-white focus:outline-none" type="button" onclick="location.href = '{{ route('supervisees.show',$reportdata['user']) }}'">View Submissions</button> 
-                            {{-- location.href = '{{ route('supervisees.show', $reportdata) }}' --}}
-                        </td>
+
+                        {{-- <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5">
+                            <button class="px-5 py-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-700 hover:text-white focus:outline-none" type="button" onclick="location.href = '{{ route('supervisees.show',$reportdata['user']) }}'">View Submissions</button>
+                        </td> --}}
                     </tr>
                 @endforeach()
-                    
+
                 {{-- @endfor --}}
             </tbody>
         </table>
     </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#reportTable').DataTable({
+                paging: false,     // No pagination
+                ordering: false,   // Disable column sorting
+                info: false        // Hide table info
+            });
+        });
+    </script>
+
 </x-app-layout>
 

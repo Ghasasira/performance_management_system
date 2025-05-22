@@ -32,6 +32,16 @@ class AttachmentsController extends Controller
      */
     public function store(Request $request)
     {
+        // Define video MIME types to exclude
+        $videoMimeTypes = [
+            'video/mp4',
+            'video/avi',
+            'video/mpeg',
+            'video/quicktime',
+            'video/x-ms-wmv',
+            'video/x-flv',
+            'video/webm',
+        ];
         $request->validate([
             'pdf' => 'required|max:10000', // 10MB Max
             'taskId' => 'required',

@@ -11,6 +11,7 @@ class Equity extends Model
     protected $table = 'equity';
     protected $fillable = [
         'user_id',
+        'quarter_id'
     ];
 
     public function quarter()

@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.0",
         "mckenziearts/laravel-notify": "^2.5",
-        "opcodesio/log-viewer": "^3.10"
+        "opcodesio/log-viewer": "^3.10",
+        "tymon/jwt-auth": "^2.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

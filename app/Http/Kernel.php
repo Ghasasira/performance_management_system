@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'staff' => \App\Http\Middleware\CheckStaffRegistration::class,
         'checkRole' => \App\Http\Middleware\CheckRole::class,
         'prevent.locked.task' => \App\Http\Middleware\PreventLockedTaskModification::class,
+        'jwtauth' => \App\Http\Middleware\JwtMiddleware::class,
     ];
 }

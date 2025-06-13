@@ -11,6 +11,7 @@ class Culture extends Model
     protected $table = 'culture';
     protected $fillable = [
         'user_id',
+        'quarter_id'
     ];
 
     public function user()

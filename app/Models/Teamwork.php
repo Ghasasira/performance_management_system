@@ -11,6 +11,7 @@ class Teamwork extends Model
     protected $table = 'teamwork';
     protected $fillable = [
         'user_id',
+        'quarter_id'
     ];
 
     public function user()

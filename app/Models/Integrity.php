@@ -11,6 +11,7 @@ class Integrity extends Model
     protected $table = 'integrity';
     protected $fillable = [
         'user_id',
+        'quarter_id'
     ];
 
     public function quarter()

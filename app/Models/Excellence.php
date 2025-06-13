@@ -11,6 +11,7 @@ class Excellence extends Model
     protected $table = 'excellence';
     protected $fillable = [
         'user_id',
+        'quarter_id'
     ];
 
     public function quarter()

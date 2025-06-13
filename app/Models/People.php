@@ -11,6 +11,7 @@ class People extends Model
     protected $table = 'people';
     protected $fillable = [
         'user_id',
+        'quarter_id'
     ];
 
     public function user()

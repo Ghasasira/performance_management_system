@@ -43,8 +43,8 @@ class Supervisees extends Component
             $query->whereIn('classification_name', ['tmt', 'exco']);
         } elseif (strtolower($currentUser->job->job_name) == "chief operations officer") {
             // COO can only see users in department_id 1 and 2 (adjust as needed)
-            // $query->whereIn('department_id', [1, 15]);
-            $query->whereIn('classification_name', ['tmt', 'exco']);
+            $query->whereIn('department_id', [1, 15]);
+            // $query->whereIn('classification_name', ['tmt', 'exco'])->whereIn('department_id', [1, 15]);
         } elseif (strtolower($currentUser->job->job_name) != "chief of staff") {
             $query->where('department_id', $currentUser->department_id);
 

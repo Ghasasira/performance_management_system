@@ -88,7 +88,12 @@ class CultureCategoriesController extends Controller
                 // ]);
             });
 
-            return $this->successResponse('Equity scores updated successfully');
+            // Get the updated culture data
+            $culture = Culture::where('user_id', $validatedData['superviseeId'])
+                ->where('quarter_id', $quarter->id)
+                ->first();
+
+            return $this->successResponse('Equity scores updated successfully', $culture);
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e);
         } catch (\Exception $e) {
@@ -167,8 +172,12 @@ class CultureCategoriesController extends Controller
                         ['excellence' => $excellenceScore]
                     );
             });
+            // Get the updated culture data
+            $culture = Culture::where('user_id', $validatedData['superviseeId'])
+                ->where('quarter_id', $quarter->id)
+                ->first();
 
-            return $this->successResponse('Excellence scores updated successfully');
+            return $this->successResponse('Excellence scores updated successfully', $culture);
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e);
         } catch (\Exception $e) {
@@ -244,8 +253,12 @@ class CultureCategoriesController extends Controller
                         ['integrity' => $integrityScore]
                     );
             });
+            // Get the updated culture data
+            $culture = Culture::where('user_id', $validatedData['superviseeId'])
+                ->where('quarter_id', $quarter->id)
+                ->first();
 
-            return $this->successResponse('Integrity scores updated successfully');
+            return $this->successResponse('Integrity scores updated successfully', $culture);
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e);
         } catch (\Exception $e) {
@@ -323,7 +336,12 @@ class CultureCategoriesController extends Controller
                     );
             });
 
-            return $this->successResponse('People skills scores updated successfully');
+            // Get the updated culture data
+            $culture = Culture::where('user_id', $validatedData['superviseeId'])
+                ->where('quarter_id', $quarter->id)
+                ->first();
+
+            return $this->successResponse('People skills scores updated successfully', $culture);
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e);
         } catch (\Exception $e) {
@@ -402,8 +420,14 @@ class CultureCategoriesController extends Controller
                         ['teamwork' => $teamworkScore]
                     );
             });
+            // Get the updated culture data
+            $culture = Culture::where('user_id', $validatedData['superviseeId'])
+                ->where('quarter_id', $quarter->id)
+                ->first();
 
-            return $this->successResponse('Teamwork scores updated successfully');
+
+
+            return $this->successResponse('Teamwork scores updated successfully', $culture);
         } catch (ValidationException $e) {
             return $this->validationErrorResponse($e);
         } catch (\Exception $e) {

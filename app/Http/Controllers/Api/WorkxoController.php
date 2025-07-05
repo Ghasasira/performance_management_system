@@ -60,12 +60,27 @@ class WorkxoController extends Controller
             }
 
             // Get members with their tasks for the active quarter
-            $members = User::where('department_id', $departmentId)
-                ->select('userId', 'firstName', 'lastName', 'username')
+            $members = User::query()
+                ->where('department_id', $departmentId)
+                ->select(['userId', 'firstName', 'lastName', 'username'])
                 ->with(['tasks' => function ($query) use ($activeQuarter) {
                     $query->where('quarter_id', $activeQuarter->id)
-                        ->select('id', 'user_id', 'title', 'description', 'status', 'score', 'weight', 'deadline',);
+                        ->select([
+                            'id',
+                            'user_id',
+                            'title',
+                            'description',
+                            'status',
+                            'score',
+                            'weight',
+                            'deadline',
+                            'quarter_id' // Include quarter_id to avoid n+1 problems
+                        ])
+                        ->with(['attachments'])
+                        ->orderBy('deadline') // Add meaningful ordering
+                        ->withCount('attachments'); // Add attachment count
                 }])
+                ->orderBy('lastName') // Order users alphabetically
                 ->get();
 
             return response()->json([

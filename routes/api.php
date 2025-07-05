@@ -29,11 +29,6 @@ Route::get('/test', function (Request $request) {
     ]);
 });
 
-// attachments route
-Route::get('/attachments/{file}', function ($file) {
-    $path = storage_path("app/private-attachments/{$file}");
-    return response()->file($path);
-});
 
 
 Route::get('/quarters', [TasksController::class, 'fetchAllQuaters'])->middleware([JwtMiddleware::class]);
@@ -47,6 +42,12 @@ Route::prefix('personal')->group(function () {
     Route::post('/tasks/{userId}/create', [TasksController::class, 'createNewTask'])->middleware([JwtMiddleware::class]);
     Route::post('/tasks/update', [TasksController::class, 'updateTask'])->middleware([JwtMiddleware::class]);
     Route::delete('/tasks/{taskId}/delete', [TasksController::class, 'destroyTask'])->middleware([JwtMiddleware::class]);
+
+    Route::get('/attachments', function () {
+        return 'Route is working!';
+    });
+    Route::post('/attachments', [TasksController::class, 'attachmentStore'])->middleware([JwtMiddleware::class]);
+    Route::delete('/attachments/{id}', [TasksController::class, 'attachmentDestroy'])->middleware([JwtMiddleware::class]);
 
     // Task actions
     Route::post('/tasks/{taskId}/submit', [TasksController::class, 'submitTask'])->middleware([JwtMiddleware::class]);

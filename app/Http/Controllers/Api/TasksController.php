@@ -18,6 +18,10 @@ use Illuminate\Validation\ValidationException;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use App\Models\Attachments;
+use Illuminate\Support\Str;
 
 class TasksController extends Controller
 {
@@ -429,6 +433,10 @@ class TasksController extends Controller
             $excellenceData = Excellence::where('user_id', $userId)->where('quarter_id', $quarter->id)->get();
             $teamworkData = Teamwork::where('user_id', $userId)->where('quarter_id', $quarter->id)->get();
 
+            // $integrity={
+
+            // };
+
             $cultureData = [
                 'integrity' => json_decode($integrityData, true),
                 'equity' => json_decode($equityData, true),
@@ -448,6 +456,76 @@ class TasksController extends Controller
                 'success' => false,
                 'message' => 'Failed to fetch culture scores',
                 'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // attachments
+    public function attachmentStore(Request $request)
+    {
+        $validated = $request->validate([
+            'pdf' => 'required|file|mimes:pdf|max:20000', // Explicit PDF only
+            'taskId' => 'required|exists:tasks,id',
+            'description' => 'required|string|max:255',
+        ]);
+
+        try {
+            $file = $request->file('pdf');
+            $uniqueId = substr(md5(uniqid(mt_rand(), true)), 0, 8);
+            $originalName = $file->getClientOriginalName();
+            $filename = "{$uniqueId}_{$originalName}";
+            $path = $file->storeAs('public/pdfs', $filename);
+
+            $attachment = Attachments::create([
+                'task_id' => $validated['taskId'],
+                'file_name' => $filename,
+                'link' => Storage::url($path),
+                'description' => $validated['description'],
+            ]);
+
+            return response()->json([
+                'message' => 'Attachment uploaded successfully!',
+                'attachment' => $attachment,
+            ], 201);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            // \Log::error('Attachment upload failed: ' . $e->getMessage());
+
+            return response()->json([
+                'error' => 'Error uploading file!',
+                // Only show details in development
+                'details' => config('app.debug') ? $e->getMessage() : null,
+            ], 500);
+        }
+    }
+
+
+    public function attachmentDestroy(Request $request, $id)
+    {
+        try {
+            $attachment = Attachments::find($id);
+
+            if (!$attachment) {
+                return response()->json(['error' => 'Attachment not found.'], 404);
+            }
+
+            $filePath = 'public/pdfs/' . $attachment->file_name;
+
+            if (Storage::exists($filePath)) {
+                if (!Storage::delete($filePath)) {
+                    return response()->json(['error' => 'Failed to delete file from storage.'], 500);
+                }
+            }
+
+            if (!$attachment->delete()) {
+                return response()->json(['error' => 'Failed to delete attachment record.'], 500);
+            }
+
+            return response()->json(['message' => 'Attachment deleted successfully.'], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An unexpected error occurred during deletion.',
+                'details' => $e->getMessage(),
             ], 500);
         }
     }
